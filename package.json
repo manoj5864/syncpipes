@@ -1,0 +1,39 @@
+{
+  "name": "syncpipes",
+  "version": "0.1.0",
+  "description": "A platform for adapters",
+  "private": true,
+  "repository": "",
+  "authors": ["Klim", "Manoj"],
+  "license": "MIT",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.0.20",
+    "jspm": "^0.16.14",
+    "path": "^0.12.7",
+    "systemjs-builder": "^0.14.10"
+  },
+  "jspm": {
+    "directories": {
+      "baseURL": "app"
+    },
+    "dependencies": {
+      "FileSaver": "npm:FileSaver@^0.10.0",
+      "angular": "github:angular/bower-angular@^1.4.7",
+      "angular-route": "github:angular/bower-angular-route@^1.4.7",
+      "bootstrap": "github:twbs/bootstrap@^3.3.5",
+      "css": "github:systemjs/plugin-css@^0.1.19",
+      "font-awesome": "npm:font-awesome@^4.4.0",
+      "js-xlsx": "github:SheetJS/js-xlsx@^0.8.0",
+      "nomnoml": "npm:nomnoml@^0.0.3",
+      "text": "github:systemjs/plugin-text@^0.0.3"
+    },
+    "devDependencies": {
+      "babel": "npm:babel-core@^5.8.24",
+      "babel-runtime": "npm:babel-runtime@^5.8.24",
+      "core-js": "npm:core-js@^1.1.4"
+    }
+  }
+}
