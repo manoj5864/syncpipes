@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ES6-AngularJS
 This is another starting project for development of AngularJS Applications using ES6
 
@@ -32,3 +33,7 @@ e2e-tests/            --> end-to-end tests
   protractor-conf.js    --> Protractor config file
   scenarios.js          --> end-to-end scenarios to be run by Protractor
 ```
+=======
+# syncpipes
+A platform for adapters
+>>>>>>> fe594320387f30eb098ed2198b0162f6f293e0cf
