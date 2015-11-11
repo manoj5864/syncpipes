@@ -1,1 +1,8 @@
-<p>List of available adapters..</p>
+<div ng-controller="rootViewCtrl as rvCtrl" ng-cloak>
+    <h2>Available adapters</h2> <br />
+    <select ng-model="selectedAdapter">
+        <option ng-repeat="option in rvCtrl.adapters" value="{{option.label}}">
+            {{option.from}} --> {{option.to}}
+        </option>
+    </select>
+</div>

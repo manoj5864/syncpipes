@@ -4,7 +4,10 @@
   "description": "A platform for adapters",
   "private": true,
   "repository": "",
-  "authors": ["Klim", "Manoj"],
+  "authors": [
+    "Klim",
+    "Manoj"
+  ],
   "license": "MIT",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
