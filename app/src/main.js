@@ -6,7 +6,7 @@ import excelToMysql from 'components/excelToMysql/excelToMysql';
 
 // Define the Angular 'main' module
 let moduleName = angular
-    .module('main', [ version ,'ngRoute', rootView] )
+    .module('main', [ version ,'ngRoute', rootView, excelToMysql] )
     .config( ($routeProvider) => {
       $routeProvider.otherwise({redirectTo: '/selectAdapter'});
     }).name;

@@ -12,12 +12,15 @@ function rootViewCtrl($scope, $location) {
         {from: "jira", to: "mysql", label: "jiratomysql", route: "/jiraToMysql" }
     ];
 
+    self.init = function() {
+      toggleLink("connectionLink");
+    };
+
     $scope.selectedAdapter = null;
     $scope.$watch('selectedAdapter', function() {
         for(var i=0; i<self.adapters.length; i++) {
             var adap = self.adapters[i];
             if(adap.label === $scope.selectedAdapter) {
-                alert(adap.route);
                 $location.path("/excelToMysql");
             }
         }

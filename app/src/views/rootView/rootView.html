@@ -1,4 +1,4 @@
-<div ng-controller="rootViewCtrl as rvCtrl" ng-cloak>
+<div ng-controller="rootViewCtrl as rvCtrl" ng-cloak ng-init="rvCtrl.init()">
     <h2>Available adapters</h2> <br />
     <select ng-model="selectedAdapter">
         <option ng-repeat="option in rvCtrl.adapters" value="{{option.label}}">
