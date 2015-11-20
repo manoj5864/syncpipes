@@ -1,40 +1,43 @@
 import angular from 'angular';
-import "js-xlsx"
-import "js-xlsx/dist/cpexcel"
 
-function EAToMysqlCtrl($scope, staticService) {
+
+function EAToMysqlCtrl($scope, $http, staticService) {
     "use strict";
     var self = this;
     self.databases = null;
+    var uploadUrl = "http://localhost:51248/api/repository/";
+    $scope.showFileUpload = true;
 
     self.init = function() {
         toggleLink("configLink");
     };
 
-    self.excelFile = null;
-    $scope.selectExcelFile = function() {
-        var fileInput = document.getElementById('excelFile');
+    self.EAFile = null;
+    $scope.selectEAFile = function() {
+        var fileInput = document.getElementById('EAFile');
         var file = fileInput.files[0];
-        self.excelFile = file;
+        self.EAFile = file;
     };
 
-    self.readExcelFile = function() {
-        var reader = new FileReader();
-        var name = self.excelFile.name;
-        reader.onload = function(e) {
-            var data = e.target.result;
-            if(typeof require !== 'undefined') XLS = require('xlsjs');
-            var workbook = XLS.read(data, {type: 'binary'});
+    $scope.uploadFile = function(files) {
+        var fd = new FormData();
+        //Take the first selected file
+        fd.append("file", files[0]);
 
-            var modelText = "";
-            var sheet_name_list = workbook.SheetNames;
-            sheet_name_list.forEach(function(y) {
-                var worksheet = workbook.Sheets[y];
-                var wjso = staticService.to_json(workbook);
-                console.log(wjso);
-            });
-        };
-        reader.readAsBinaryString(self.excelFile);
+        $http.post(uploadUrl, fd, {
+            headers: { 'Content-Type': undefined },
+            transformRequest: angular.identity
+        }).success(function (data) {self.getEAJson(data);
+            $scope.showFileUpload = false;
+        }
+        ).error(function (data) {console.log(data)});
+
+    };
+
+
+    self.getEAJson = function(data) {
+        //todo:add file handling
+        $http.get(uploadUrl+"?fileName="+data, {}).success(function (data) {console.log(data)}).error(function (data) {console.log(data)});
     };
 
     self.connectToMysql = function() {

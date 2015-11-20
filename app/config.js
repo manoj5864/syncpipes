@@ -8,6 +8,7 @@ System.config({
     ]
   },
   paths: {
+    "EAToMysql/*": "src/components/EAToMySql/*.js",
     "excelToMysql/*": "src/components/excelToMySql/*.js",
     "components/*": "src/components/*.js",
     "views/*": "src/views/*",
