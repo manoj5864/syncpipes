@@ -2,14 +2,18 @@
 
     <div class="panel panel-default">
         <div class="panel-heading">Import from EA</div>
-        <div class="panel-body" ng-show="showFileUpload">
+        <div class="panel-body" ng-show="(showFileUpload && !showData)">
             <p> Upload your .eap file </p>
             <form enctype="multipart/form-data">
                 <input class="btn btn-primary" id="EAFile" type="file" ng-model="EAFile" onchange="angular.element(this).scope().uploadFile(this.files)" multiple/>
             </form>
         </div>
-        <div class="panel-body" ng-hide="showFileUpload">
-            <p> Upload is started </p>
+        <div class="panel-body" ng-show="(!showFileUpload  && !showData)">
+            <div>Loading<i class="ellipsis"><i>.</i><i>.</i><i>.</i></i></div>​
+            <p> File was successfully uploaded, but it takes some time for us to extract the data. </p>
+        </div>
+        <div class="panel-body" ng-show="(!showFileUpload && showData)">
+            <p> {{ JSONSchema }} </p>
         </div>
     </div>
 

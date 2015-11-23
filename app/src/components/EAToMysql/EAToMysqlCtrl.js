@@ -4,9 +4,11 @@ import angular from 'angular';
 function EAToMysqlCtrl($scope, $http, staticService) {
     "use strict";
     var self = this;
+
     self.databases = null;
     var uploadUrl = "http://localhost:51248/api/repository/";
     $scope.showFileUpload = true;
+    $scope.showData = false;
 
     self.init = function() {
         toggleLink("configLink");
@@ -27,17 +29,25 @@ function EAToMysqlCtrl($scope, $http, staticService) {
         $http.post(uploadUrl, fd, {
             headers: { 'Content-Type': undefined },
             transformRequest: angular.identity
-        }).success(function (data) {self.getEAJson(data);
-            $scope.showFileUpload = false;
-        }
-        ).error(function (data) {console.log(data)});
+            }).success(function (data) {
+                self.getEAJson(data);
+                $scope.showFileUpload = false;
+            })
+            .error(function (error) {console.log(error)});
 
     };
 
 
     self.getEAJson = function(data) {
         //todo:add file handling
-        $http.get(uploadUrl+"?fileName="+data, {}).success(function (data) {console.log(data)}).error(function (data) {console.log(data)});
+        $http.get(uploadUrl+"?fileName="+data, {})
+            .success(function (data) {
+                $scope.JSONSchema = data;
+                $scope.showData = true;
+            })
+            .error(function (error) {
+                console.log(error)
+            });
     };
 
     self.connectToMysql = function() {
