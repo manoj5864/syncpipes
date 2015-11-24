@@ -188,3 +188,13 @@ body {
   50% { opacity: 0; }
   100% { opacity: 1; }
 }
+
+.adapters {
+  text-align: center;
+  background: #e7e7e7;
+  height: 150px;
+  border: 1px solid;
+  vertical-align: middle;
+  line-height: 150px;
+  margin-left: 5px;
+}

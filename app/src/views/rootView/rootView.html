@@ -1,8 +1,10 @@
-<div ng-controller="rootViewCtrl as rvCtrl" ng-cloak ng-init="rvCtrl.init()">
-    <h2>Available adapters</h2> <br />
-    <select ng-model="selectedAdapter">
-        <option ng-repeat="option in rvCtrl.adapters" value="{{option.label}}">
-            {{option.from}} --> {{option.to}}
-        </option>
-    </select>
+<div ng-controller="rootViewCtrl as rvCtrl" ng-cloak ng-init="rvCtrl.init()" class="container-fluid">
+    <h2>Available adapters</h2><br /><br />
+
+    <div class="row">
+        <div class="col-md-4" ng-repeat="option in rvCtrl.adapters">
+            <a ng-href="#{{option.route}}"><div class="adapters"> {{option.from}} --> {{option.to}} </div></a>
+        </div>
+    </div>
 </div>
+
