@@ -2,7 +2,7 @@ import angular from 'angular';
 import "js-xlsx"
 import "js-xlsx/dist/cpexcel"
 
-function excelToMysqlCtrl($q, $scope, $location, staticService) {
+function excelToMysqlCtrl($q, $scope, $location, excelToMysqlService) {
     "use strict";
     var self = this;
     self.databases = null;
@@ -12,7 +12,6 @@ function excelToMysqlCtrl($q, $scope, $location, staticService) {
     self.excelSheets = [];
     self.objectMapper = [];
     $scope.database = null;
-
 
     var mysqlConnectionServer = "http://localhost:8084/connectToMysql";
     var mysqlCreateDB = "http://localhost:8084/createADatabase";
@@ -37,7 +36,7 @@ function excelToMysqlCtrl($q, $scope, $location, staticService) {
                 if (db.Database === $scope.database) {
                     var options = {};
                     options.databaseName = $scope.database;
-                    var promise = staticService.queryMysql(getTables, options);
+                    var promise = excelToMysqlService.queryMysql(getTables, options);
                     promise.then(
                         function(payload) {
                             self.tables = payload;
@@ -53,7 +52,7 @@ function excelToMysqlCtrl($q, $scope, $location, staticService) {
         var options = {};
         options.databaseName = $scope.database;
         options.tableName = $scope.tableName;
-        var promise = staticService.queryMysql(getColumns, options);
+        var promise = excelToMysqlService.queryMysql(getColumns, options);
         promise.then(
             function(payload) {console.log(payload);},
             function(errorPayload) { alert("Unable to get columns!");}
@@ -66,7 +65,7 @@ function excelToMysqlCtrl($q, $scope, $location, staticService) {
         options.port = $scope.port;
         options.userName = $scope.userName;
         options.password = $scope.password;
-        var promise = staticService.queryMysql(mysqlConnectionServer, options);
+        var promise = excelToMysqlService.queryMysql(mysqlConnectionServer, options);
         promise.then(
             function(payload) { self.databases = payload; },
             function(errorPayload) { alert("Unable to connect to the database!"); }
@@ -76,7 +75,7 @@ function excelToMysqlCtrl($q, $scope, $location, staticService) {
     self.createADatabase = function() {
         var options = {};
         options.databaseName = $scope.databaseName;
-        var promise = staticService.queryMysql(mysqlCreateDB, options);
+        var promise = excelToMysqlService.queryMysql(mysqlCreateDB, options);
         promise.then(
             function(payload) {
                 self.connectToMysql();
@@ -90,13 +89,13 @@ function excelToMysqlCtrl($q, $scope, $location, staticService) {
         toggleLink("mappingLink");
         $("#config").hide();
         $("#mapper").show();
-        staticService.readExcelFile(self.excelFile).then(function(data) {
+        excelToMysqlService.readExcelFile(self.excelFile).then(function(data) {
             if(typeof require !== 'undefined') XLS = require('xlsjs');
             var workbook = XLS.read(data, {type: 'binary'});
             var modelText = "";
             self.excelSheets = workbook.SheetNames;
             self.excelSheets.forEach(function(y) {
-                self.excelAsJson.push(staticService.toJson(workbook));
+                self.excelAsJson.push(excelToMysqlService.toJson(workbook));
             });
 
             for(var i=0; i<self.excelSheets.length; i++) {
@@ -110,7 +109,7 @@ function excelToMysqlCtrl($q, $scope, $location, staticService) {
                             var map = {};
                             map.from = sheet;
                             map.to = table;
-                            var columns = staticService.getColumnsInExcelSheet(sheet, self.excelAsJson);
+                            var columns = excelToMysqlService.getColumnsInExcelSheet(sheet, self.excelAsJson);
 
                             self.objectMapper.push(map);
                         }
@@ -119,7 +118,7 @@ function excelToMysqlCtrl($q, $scope, $location, staticService) {
                         var map = {};
                         map.from = sheet;
                         map.to = null;
-                        var columns = staticService.getColumnsInExcelSheet(sheet, self.excelAsJson);
+                        var columns = excelToMysqlService.getColumnsInExcelSheet(sheet, self.excelAsJson);
                         console.log(columns);
 
                         self.objectMapper.push(map);

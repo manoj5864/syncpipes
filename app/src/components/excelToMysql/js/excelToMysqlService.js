@@ -1,4 +1,4 @@
-var staticService = function($http, $q) {
+var excelToMysqlService = function($http, $q) {
     var service = {};
     var POST = "POST";
 
@@ -31,7 +31,7 @@ var staticService = function($http, $q) {
                 }
             }
         }
-    }
+    };
 
     service.queryMysql = function(url, options) {
         var deferred = $q.defer();
@@ -48,7 +48,7 @@ var staticService = function($http, $q) {
             deferred.reject(msg);
         });
         return deferred.promise;
-    }
+    };
 
     return service;
 };
