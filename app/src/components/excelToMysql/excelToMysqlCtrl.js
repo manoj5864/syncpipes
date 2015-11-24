@@ -13,6 +13,12 @@ function excelToMysqlCtrl($q, $scope, $location, staticService) {
     self.objectMapper = [];
     $scope.database = null;
 
+
+    var mysqlConnectionServer = "http://localhost:8084/connectToMysql";
+    var mysqlCreateDB = "http://localhost:8084/createADatabase";
+    var getTables = "http://localhost:8084/getTables";
+    var getColumns = "http://localhost:8084/getColumns";
+
     self.init = function() {
         toggleLink("configLink");
     };
@@ -31,7 +37,7 @@ function excelToMysqlCtrl($q, $scope, $location, staticService) {
                 if (db.Database === $scope.database) {
                     var options = {};
                     options.databaseName = $scope.database;
-                    var promise = staticService.getTables(options);
+                    var promise = staticService.queryMysql(getTables, options);
                     promise.then(
                         function(payload) {
                             self.tables = payload;
@@ -47,7 +53,7 @@ function excelToMysqlCtrl($q, $scope, $location, staticService) {
         var options = {};
         options.databaseName = $scope.database;
         options.tableName = $scope.tableName;
-        var promise = staticService.getColumns(options);
+        var promise = staticService.queryMysql(getColumns, options);
         promise.then(
             function(payload) {console.log(payload);},
             function(errorPayload) { alert("Unable to get columns!");}
@@ -60,7 +66,7 @@ function excelToMysqlCtrl($q, $scope, $location, staticService) {
         options.port = $scope.port;
         options.userName = $scope.userName;
         options.password = $scope.password;
-        var promise = staticService.connectToMysql(options);
+        var promise = staticService.queryMysql(mysqlConnectionServer, options);
         promise.then(
             function(payload) { self.databases = payload; },
             function(errorPayload) { alert("Unable to connect to the database!"); }
@@ -70,7 +76,7 @@ function excelToMysqlCtrl($q, $scope, $location, staticService) {
     self.createADatabase = function() {
         var options = {};
         options.databaseName = $scope.databaseName;
-        var promise = staticService.createADatabase(options);
+        var promise = staticService.queryMysql(mysqlCreateDB, options);
         promise.then(
             function(payload) {
                 self.connectToMysql();

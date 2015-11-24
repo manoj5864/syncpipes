@@ -1,11 +1,5 @@
 var staticService = function($http, $q) {
     var service = {};
-
-    var mysqlConnectionServer = "http://localhost:8084/connectToMysql";
-    var mysqlCreateDB = "http://localhost:8084/createADatabase";
-    var getTables = "http://localhost:8084/getTables";
-    var getColumns = "http://localhost:8084/getColumns"
-
     var POST = "POST";
 
     service.readExcelFile = function(file) {
@@ -39,61 +33,10 @@ var staticService = function($http, $q) {
         }
     }
 
-    service.connectToMysql = function(options) {
+    service.queryMysql = function(url, options) {
         var deferred = $q.defer();
         $http({
-            url: mysqlConnectionServer,
-            method: POST,
-            async: false,
-            data: options,
-            dataType: "json",
-            contentType: "application/json",
-        }).then(function(res) {
-            deferred.resolve(res.data);
-        }, function(msg) {
-            deferred.reject(msg);
-        });
-        return deferred.promise;
-    };
-
-    service.createADatabase = function(options) {
-        var deferred = $q.defer();
-        $http({
-            url: mysqlCreateDB,
-            method: POST,
-            async: false,
-            data: options,
-            dataType: "json",
-            contentType: "application/json",
-        }).then(function(res) {
-            deferred.resolve(res.data);
-        }, function(msg) {
-            deferred.reject(msg);
-        });
-        return deferred.promise;
-    }
-
-    service.getTables = function(options) {
-        var deferred = $q.defer();
-        $http({
-            url: getTables,
-            method: POST,
-            async: false,
-            data: options,
-            dataType: "json",
-            contentType: "application/json",
-        }).then(function(res) {
-            deferred.resolve(res.data);
-        }, function(msg) {
-            deferred.reject(msg);
-        });
-        return deferred.promise;
-    }
-
-    service.getColumns = function(options) {
-        var deferred = $q.defer();
-        $http({
-            url: getColumns,
+            url: url,
             method: POST,
             async: false,
             data: options,
