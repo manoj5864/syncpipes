@@ -1,64 +1,133 @@
-<div ng-controller="excelToMysqlCtrl as ctrl" ng-cloak ng-init="ctrl.init()">
+<style>
+    .between {
+        border: 3px dotted #0099CC;
+        width:200px;
+        margin-left:10px;
+        margin-right:10px;
+    }
+</style>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">Import from Excel</div>
-        <div class="panel-body">
-            <p> Upload your excel file </p>
-            <form enctype="multipart/form-data">
-                <input class="btn btn-primary" id="excelFile" type="file" ng-model="excelFile" onchange="angular.element(this).scope().selectExcelFile()" multiple/>
-            </form>
+<div ng-controller="excelToMysqlCtrl as ctrl" ng-cloak ng-init="ctrl.init()" id="excelToMySql">
+    <div id="config" style="display: block">
+        <div class="panel panel-default">
+            <div class="panel-heading">Import from Excel</div>
+            <div class="panel-body">
+                <p> Upload your excel file </p>
+                <form enctype="multipart/form-data">
+                    <input class="btn btn-primary" id="excelFile" type="file" ng-model="excelFile" onchange="angular.element(this).scope().selectExcelFile()" multiple/>
+                </form>
+            </div>
         </div>
-    </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">Export to MySql</div>
+            <div class="panel-body">
+                <p>Configuration to connect to your MySql</p>
+                <div class="form-group">
+                    <label for="baseUrl">Base Url</label>
+                    <input type="text" class="form-control" id="baseUrl" placeholder="localhost" ng-model="baseUrl" />
+                </div>
+                <div class="form-group">
+                    <label for="port">Port</label>
+                    <input type="text" class="form-control" id="port" placeholder="3306" ng-model="port" />
+                </div>
+                <div class="form-group">
+                    <label for="userName">User Name</label>
+                    <input type="text" class="form-control" id="userName" placeholder="mustermann" ng-model="userName" />
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" placeholder="Password" ng-model="password" />
+                </div>
+                <button type="button" class="btn btn-primary" ng-click="ctrl.connectToMysql()">Connect</button>
+                <br/><br/>
+                <div class="panel panel-default" ng-show="ctrl.databases !== null">
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label for="selectDb">Select a database</label>
+                            <select id="selectDb" ng-model="database">
+                                <option ng-repeat="option in ctrl.databases" value="{{option.Database}}">
+                                    {{option.Database}}
+                                </option>
+                            </select>
+                        </div>
 
+                        <div>
+                            <p>-- OR --</p>
+                        </div>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">Export to MySql</div>
-        <div class="panel-body">
-            <p>Configuration to connect to your MySql</p>
-            <div class="form-group">
-                <label for="baseUrl">Base Url</label>
-                <input type="text" class="form-control" id="baseUrl" placeholder="localhost" ng-model="baseUrl" />
-            </div>
-            <div class="form-group">
-                <label for="port">Port</label>
-                <input type="text" class="form-control" id="port" placeholder="3306" ng-model="port" />
-            </div>
-            <div class="form-group">
-                <label for="userName">User Name</label>
-                <input type="text" class="form-control" id="userName" placeholder="mustermann" ng-model="userName" />
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" class="form-control" id="password" placeholder="Password" ng-model="password" />
-            </div>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createDB">Create a new database</button>
 
-            <button type="button" class="btn btn-primary" ng-click="ctrl.connectToMysql()">Connect</button>
-
-            <br/><br/>
-
-            <div class="panel panel-default" ng-show="ctrl.databases !== null">
-                <div class="panel-body">
-                    <div class="form-group">
-                        <label for="selectDb">Select a database</label>
-                        <select id="selectDb" ng-model="database">
-                            <option ng-repeat="option in ctrl.databases" value="{{option.Database}}">
-                                {{option.Database}}
-                            </option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <p>-- OR --</p>
-                    </div>
-
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="createDb" placeholder="TestDB" ng-model="databaseName" />
-                        <button type="button" class="btn btn-primary" ng-click="ctrl.createADatabase()">Create a new database</button>
+                        <div class="modal fade" id="createDB" tabindex="-1" role="dialog" aria-labelledby="createDBLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title" id="myModalLabel">Create a new database</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label for="dbName">Password</label>
+                                            <input id="dbName" type="text" class="form-control" placeholder="TestDB" ng-model="databaseName" />
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary" ng-click="ctrl.createADatabase()" data-dismiss="modal">Create</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br /><br />
+                        <button type="button" class="btn btn-primary" ng-click="ctrl.createMapping()" ng-show="database != null">Create necessary mappings</button>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 
+    <div id="mapper" style="display: none" class="container-fluid">
+        <div class="row" style="text-align: center">
+            <div class="col-md-4">Sheets in the Excel File</div>
+            <div class="col-md-4">Object map</div>
+            <div class="col-md-4">Tables in MySql</div>
+        </div>
+        <hr /><br />
+
+        <div class="row" ng-repeat="sheet in ctrl.excelSheets" style="text-align: center">
+            <div class="col-md-4"><p class="btn btn-default" style="width: 100%;">{{sheet}}</p></div>
+            <div class="col-md-4"><p><hr class="between" style="width: 100%;" /></p></div>
+            <div class="col-md-4">
+                <div ng-show="ctrl.tables.length > 0">
+                    <select ng-change="ctrl.updateObjectMapper(sheet, option)" ng-options="option for option in ctrl.tables" ng-model="option"></select>
+                    <p style="float: right"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#attributeMap" title="Create attribute mappings"> >> </button></p>
+                    <div class="modal fade" id="attributeMap" tabindex="-1" role="dialog" aria-labelledby="attributeMapLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="createAttribteMap">Create attribute map</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group row">
+                                        <div class="col-md-4"><p class="btn btn-default" style="width: 100%;">{{sheet}}</p></div>
+                                        <div class="col-md-4"><p><hr class="between" style="width: 100%;" /></p></div>
+                                        <div class="col-md-4">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary" ng-click="ctrl.createAttributeMapping()" data-dismiss="modal">Create</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div ng-show="ctrl.tables == null || ctrl.tables.length == 0"><p class="btn btn-default" style="width: 100%;">{{sheet}}</p></div>
+            </div>
         </div>
     </div>
 </div>
-
