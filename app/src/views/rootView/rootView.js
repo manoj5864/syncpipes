@@ -8,6 +8,7 @@ function rootViewCtrl($scope, $location) {
     var self = this;
 
     self.adapters = [
+        {from: "EA", to: "mysql", label:"eatomysql", route: "/EAToMysql" },
         {from: "excel", to: "mysql", label:"exceltomysql", route: "/excelToMysql" },
         {from: "jira", to: "mysql", label: "jiratomysql", route: "/jiraToMysql" }
     ];
@@ -21,7 +22,7 @@ function rootViewCtrl($scope, $location) {
         for(var i=0; i<self.adapters.length; i++) {
             var adap = self.adapters[i];
             if(adap.label === $scope.selectedAdapter) {
-                $location.path("/excelToMysql");
+                $location.path(adap.route);
             }
         }
     });

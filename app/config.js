@@ -8,6 +8,7 @@ System.config({
     ]
   },
   paths: {
+    "EAToMysql/*": "src/components/EAToMySql/*.js",
     "excelToMysql/*": "src/components/excelToMySql/*.js",
     "components/*": "src/components/*.js",
     "views/*": "src/views/*",
@@ -27,6 +28,7 @@ System.config({
     "css": "github:systemjs/plugin-css@0.1.19",
     "font-awesome": "npm:font-awesome@4.4.0",
     "js-xlsx": "github:SheetJS/js-xlsx@0.8.0",
+    "json-schema-parser": "npm:json-schema-parser@0.1.0",
     "nomnoml": "npm:nomnoml@0.0.3",
     "text": "github:systemjs/plugin-text@0.0.3",
     "github:angular/bower-angular-route@1.4.7": {
@@ -64,6 +66,12 @@ System.config({
     },
     "npm:inherits@2.0.1": {
       "util": "github:jspm/nodelibs-util@0.1.0"
+    },
+    "npm:json-pointer@0.3.0": {
+      "foreach": "npm:foreach@2.0.5"
+    },
+    "npm:json-schema-parser@0.1.0": {
+      "json-pointer": "npm:json-pointer@0.3.0"
     },
     "npm:lodash@3.7.0": {
       "process": "github:jspm/nodelibs-process@0.1.2"
