@@ -8,9 +8,9 @@ function rootViewCtrl($scope, $location) {
     var self = this;
 
     self.adapters = [
-        {from: "EA", to: "mysql", label:"eatomysql", route: "/EAToMysql" },
-        {from: "excel", to: "mysql", label:"exceltomysql", route: "/excelToMysql" },
-        {from: "jira", to: "mysql", label: "jiratomysql", route: "/jiraToMysql" }
+        {from: "Excel", to: "MySql", label:"exceltomysql", route: "/excelToMysql" },
+        {from: "EA", to: "MySql", label:"eatomysql", route: "/EAToMysql" },
+        {from: "Jira", to: "MySql", label: "jiratomysql", route: "/jiraToMysql" }
     ];
 
     self.init = function() {
