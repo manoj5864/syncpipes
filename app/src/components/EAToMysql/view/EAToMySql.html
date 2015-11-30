@@ -7,6 +7,7 @@
             <form enctype="multipart/form-data">
                 <input class="btn btn-primary" id="EAFile" type="file" ng-model="EAFile" onchange="angular.element(this).scope().uploadFile(this.files)" multiple/>
             </form>
+            <button onclick="angular.element(this).scope().getModel()"> Get Model </button>
         </div>
         <div class="panel-body" ng-show="(!showFileUpload  && !showData)">
             <div>Loading<i class="ellipsis"><i>.</i><i>.</i><i>.</i></i></div>​

@@ -31,6 +31,7 @@ System.config({
     "json-schema-parser": "npm:json-schema-parser@0.1.0",
     "nomnoml": "npm:nomnoml@0.0.3",
     "text": "github:systemjs/plugin-text@0.0.3",
+    "traverse": "npm:traverse@0.6.6",
     "github:angular/bower-angular-route@1.4.7": {
       "angular": "github:angular/bower-angular@1.4.7"
     },

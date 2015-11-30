@@ -32,7 +32,8 @@
       "js-xlsx": "github:SheetJS/js-xlsx@^0.8.0",
       "json-schema-parser": "npm:json-schema-parser@^0.1.0",
       "nomnoml": "npm:nomnoml@^0.0.3",
-      "text": "github:systemjs/plugin-text@^0.0.3"
+      "text": "github:systemjs/plugin-text@^0.0.3",
+      "traverse": "npm:traverse@^0.6.6"
     },
     "devDependencies": {
       "babel": "npm:babel-core@^5.8.24",
