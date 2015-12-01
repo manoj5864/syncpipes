@@ -4,9 +4,10 @@ import traverse from 'traverse';
 function EAToMysqlCtrl($scope, $http, staticService) {
     "use strict";
     var self = this;
-
-    self.databases = null;
     var uploadUrl = "http://localhost:51248/api/repository/";
+    self.EAFile = null;
+    self.databases = null;
+
     $scope.showFileUpload = true;
     $scope.showData = false;
 
@@ -14,35 +15,22 @@ function EAToMysqlCtrl($scope, $http, staticService) {
         toggleLink("configLink");
     };
 
-    self.EAFile = null;
+
     $scope.getNodes = function () {
         var data = staticService.dataFromEA();
         var obj = JSON.parse(data);
-
         var nodes = [];
-
         traverse(obj).forEach(function(){
             if (this.level == 1){
                 nodes.push(this.key);
             }
         });
         return nodes;
-
-        //levels.forEach(function(key, value){
-        //    console.log(key+":"+value);
-        //    var keys = traverse(obj).forEach(function(){
-        //         if (value == this.level){
-        //             console.log(this.key);
-        //         };
-        //    });
-        //})
     };
 
     $scope.getAttributesOfNode = function(node){
-
             var data = staticService.dataFromEA();
             var obj = JSON.parse(data);
-
             let keys = new Set();
             console.log(node);
             traverse(obj[node]).forEach(function(){
@@ -96,13 +84,30 @@ function EAToMysqlCtrl($scope, $http, staticService) {
             });
     };
 
+    $scope.$watch('database', function() {
+        if (self.databases != null) {
+            for (var i = 0; i < self.databases.length; i++) {
+                var db = self.databases[i];
+                if (db.Database === $scope.database) {
+                    var options = {};
+                    options.databaseName = $scope.database;
+                    var promise = excelToMysqlService.queryMysql(getTables, options);
+                    promise.then(
+                        function(payload) { self.tables = payload; },
+                        function(errorPayload) { alert("Unable to get tables!");}
+                    );
+                }
+            }
+        }
+    });
+
     self.connectToMysql = function() {
         var options = {};
         options.baseUrl = $scope.baseUrl;
         options.port = $scope.port;
         options.userName = $scope.userName;
         options.password = $scope.password;
-        var promise = staticService.connectToMysql(options);
+        var promise = excelToMysqlService.queryMysql(mysqlConnectionServer, options);
         promise.then(
             function(payload) { self.databases = payload; },
             function(errorPayload) { alert("Unable to connect to the database!"); }
@@ -112,12 +117,29 @@ function EAToMysqlCtrl($scope, $http, staticService) {
     self.createADatabase = function() {
         var options = {};
         options.databaseName = $scope.databaseName;
-        var promise = staticService.createADatabase(options);
-        promise.then(
-            function(payload) { self.databases = payload;},
-            function(errorPayload) { alert("Unable to connect to the database!");}
-        );
+        var promise = excelToMysqlService.queryMysql(mysqlCreateDB, options);
+        promise.then(function(payload) {
+            self.connectToMysql();
+            alert("Successfully created a new database!");
+        }, function(errorPayload) { alert("Unable to connect to the database!");});
     }
+
+    self.getColumns = function(databaseName, tableName) {
+        if (tableName !== undefined && databaseName !== undefined) {
+            var options = {};
+            options.databaseName = databaseName;
+            options.tableName = tableName;
+            var promise = excelToMysqlService.queryMysql(getColumns, options);
+            promise.then(function(payload) {
+                self.tableColumnMap[tableName] = payload; //Field, Type, Null, Key, Default, Extra
+                return payload;
+            }, function(errorPayload) { alert("Unable to get columns!");});
+        }
+    }
+
+
+
+
 }
 
 export default EAToMysqlCtrl;
