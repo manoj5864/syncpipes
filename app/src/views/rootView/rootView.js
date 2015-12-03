@@ -16,16 +16,6 @@ function rootViewCtrl($scope, $location) {
     self.init = function() {
       toggleLink("connectionLink");
     };
-
-    $scope.selectedAdapter = null;
-    $scope.$watch('selectedAdapter', function() {
-        for(var i=0; i<self.adapters.length; i++) {
-            var adap = self.adapters[i];
-            if(adap.label === $scope.selectedAdapter) {
-                $location.path(adap.route);
-            }
-        }
-    });
 }
 
 let moduleName = angular

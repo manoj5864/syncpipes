@@ -13,3 +13,13 @@ var sleep = function(milliseconds) {
         }
     }
 };
+
+var fixedUrl = {
+    mysqlConnectionServer: "http://localhost:8084/connectToMysql",
+    mysqlCreateDB: "http://localhost:8084/createADatabase",
+    getTables: "http://localhost:8084/getTables",
+    getColumns: "http://localhost:8084/getColumns",
+    createTable: "http://localhost:8084/createTable",
+    insertRow: "http://localhost:8084/insertRow",
+    createEmptyTable: "http://localhost:8084/createEmpltyTable"
+};
