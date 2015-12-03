@@ -169,15 +169,18 @@ function EAToMysqlCtrl($scope, $http, staticService) {
         for (var iNode=0; iNode<nodes.length; iNode++){
             var map={};
             map.from = nodes[iNode];
+            map.to = null;
             var attributes = self.getAttributesOfNode(nodes[iNode])
             map.attributes=[];
             for (var iAttribute=0; iAttribute < attributes.length; iAttribute++){
                 var temp = {};
                 temp.from = attributes[iAttribute];
+                temp.to = null;
                 map.attributes.push(temp);
             }
+            self.objectMapper.push(map);
         }
-        self.objectMapper.push(map);
+        
         self.nodes = self.getNodes();
     };
 
@@ -209,29 +212,30 @@ function EAToMysqlCtrl($scope, $http, staticService) {
         toggleLink("executionLink");
         $("#mapper").hide();
         $("#execution").show();
-        for(var i=0; i<self.objectMapper.length; i++) {
-            var map = self.objectMapper[i];
-
-            //create table
-            if(!self.tableColumnMap.hasOwnProperty(map.to)) {
-                var cols = [];
-                for(var j=0; j<map.attributes.length; j++)
-                    cols.push(map.attributes[j].to);
-                self.createTable($scope.database, map.to, cols);
-            } else {
-                //logic to update table and columns if table exist goes here
-            }
-        }
-
-        sleep(1000);
-        //insert row
 
         var nodes = self.getNodes();
+        console.log(self.objectMapper);
         for(var i=0; i<nodes.length; i++) {
 
             var map = self.getMapFromObjectMapper(self.objectMapper, nodes[i]);
-            
-            console.log(map);
+
+            if (map.to != null){
+                var attributeValuesList = []
+                for(var iAttribute=0; iAttribute<map.attributes.length; iAttribute++) {
+                    if (map.attributes[iAttribute].to != null){
+                        var temp = [];
+                        temp.push({
+                            key: map.attributes[iAttribute].to ,
+                            value:self.getAttributesValues(nodes[i],map.attributes[iAttribute].from)
+                        });
+                        attributeValuesList.push(temp);
+                    }
+                }
+                console.log(attributeValuesList);
+            }
+
+
+            //self.insertRow($scope.database, tableName, attributeValuesList);
 
         }
 
@@ -244,12 +248,6 @@ function EAToMysqlCtrl($scope, $http, staticService) {
             if(self.objectMapper[i].from === fromObject) return self.objectMapper[i];
     }
 
-    self.getExcelRowAsJson = function(sheetName) {
-        for(var i=0; i<self.excelSheets.length; i++)
-            if(self.excelSheets[i].hasOwnProperty(sheetName))
-                return self.excelSheets[i][sheetName];
-        return null;
-    }
 
     self.createTable = function(databaseName, tableName, cols) {
         var options = {};
