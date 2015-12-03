@@ -205,8 +205,36 @@ function EAToMysqlCtrl($scope, $http, staticService) {
                 // add more logic to update the map automatically here..
             }
         }
-    }
+    };
+    self.transformAndSaveToMysql = function(table, attributeValuesObj) {
+        var keys = [];
+        keys = Object.keys(attributeValuesObj);
+        for (var i=0; i<attributeValuesObj[keys[0]].length; i++){
+            var temp= {};
+            for (var j=0; j<keys.length;j++){
+                temp[keys[j]] = attributeValuesObj[keys[j]][i];
+            }
+            console.log(temp);
+            self.insertRow($scope.database, table, temp);
+        }
 
+
+
+
+
+        //for (var i=0; i<attributeValuesList[0][0].value.length; i++){
+        //
+        //    console.log(attributeValuesList.length);
+        //    var temp= {};
+        //    for (var j=0; j<attributeValuesList.length;j++){
+        //        temp[attributeValuesList[j][0].key] = attributeValuesList[j][0].value[i];
+        //    }
+        //    console.log(temp);
+
+        //}
+
+
+    };
 
     self.executeModel = function() {
         toggleLink("executionLink");
@@ -214,32 +242,26 @@ function EAToMysqlCtrl($scope, $http, staticService) {
         $("#execution").show();
 
         var nodes = self.getNodes();
-        console.log(self.objectMapper);
+
         for(var i=0; i<nodes.length; i++) {
 
             var map = self.getMapFromObjectMapper(self.objectMapper, nodes[i]);
 
             if (map.to != null){
-                var attributeValuesList = []
+                var attributeValuesList = [];
+                var temp = {};
                 for(var iAttribute=0; iAttribute<map.attributes.length; iAttribute++) {
                     if (map.attributes[iAttribute].to != null){
-                        var temp = [];
-                        temp.push({
-                            key: map.attributes[iAttribute].to ,
-                            value:self.getAttributesValues(nodes[i],map.attributes[iAttribute].from)
-                        });
-                        attributeValuesList.push(temp);
+                        temp[map.attributes[iAttribute].to] = self.getAttributesValues(nodes[i],map.attributes[iAttribute].from);
                     }
                 }
-                console.log(attributeValuesList);
+                self.transformAndSaveToMysql(map.to, temp);
             }
 
 
-            //self.insertRow($scope.database, tableName, attributeValuesList);
+            
 
         }
-
-        sleep(1000);
         $(".log").append("<br /><h3>Execution complete!</h3>");
     }
 
