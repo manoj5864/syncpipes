@@ -15,13 +15,6 @@ function excelToMysqlCtrl($q, $scope, $location, excelToMysqlService) {
     $scope.database = null;
     self.tableColumnMap = {};
 
-    var mysqlConnectionServer = "http://localhost:8084/connectToMysql";
-    var mysqlCreateDB = "http://localhost:8084/createADatabase";
-    var getTables = "http://localhost:8084/getTables";
-    var getColumns = "http://localhost:8084/getColumns";
-    var createTable = "http://localhost:8084/createTable";
-    var insertRow = "http://localhost:8084/insertRow";
-
     self.init = function() {
         toggleLink("configLink");
     };
@@ -39,7 +32,7 @@ function excelToMysqlCtrl($q, $scope, $location, excelToMysqlService) {
                 if (db.Database === $scope.database) {
                     var options = {};
                     options.databaseName = $scope.database;
-                    var promise = excelToMysqlService.queryMysql(getTables, options);
+                    var promise = excelToMysqlService.queryMysql(fixedUrl.getTables, options);
                     promise.then(
                         function(payload) { self.tables = payload; },
                         function(errorPayload) { alert("Unable to get tables!");}
@@ -54,7 +47,7 @@ function excelToMysqlCtrl($q, $scope, $location, excelToMysqlService) {
             var options = {};
             options.databaseName = databaseName;
             options.tableName = tableName;
-            var promise = excelToMysqlService.queryMysql(getColumns, options);
+            var promise = excelToMysqlService.queryMysql(fixedUrl.getColumns, options);
              promise.then(function(payload) {
                  self.tableColumnMap[tableName] = payload; //Field, Type, Null, Key, Default, Extra
                 return payload;
@@ -68,7 +61,7 @@ function excelToMysqlCtrl($q, $scope, $location, excelToMysqlService) {
         options.port = $scope.port;
         options.userName = $scope.userName;
         options.password = $scope.password;
-        var promise = excelToMysqlService.queryMysql(mysqlConnectionServer, options);
+        var promise = excelToMysqlService.queryMysql(fixedUrl.mysqlConnectionServer, options);
         promise.then(
             function(payload) { self.databases = payload; },
             function(errorPayload) { alert("Unable to connect to the database!"); }
@@ -78,12 +71,12 @@ function excelToMysqlCtrl($q, $scope, $location, excelToMysqlService) {
     self.createADatabase = function() {
         var options = {};
         options.databaseName = $scope.databaseName;
-        var promise = excelToMysqlService.queryMysql(mysqlCreateDB, options);
+        var promise = excelToMysqlService.queryMysql(fixedUrl.mysqlCreateDB, options);
         promise.then(function(payload) {
             self.connectToMysql();
             alert("Successfully created a new database!");
         }, function(errorPayload) { alert("Unable to connect to the database!");});
-    }
+    };
 
     self.createMapping = function(){
         toggleLink("mappingLink");
@@ -233,7 +226,7 @@ function excelToMysqlCtrl($q, $scope, $location, excelToMysqlService) {
         options.databaseName = databaseName;
         options.tableName = tableName;
         options.cols = cols;
-        var promise = excelToMysqlService.queryMysql(createTable, options);
+        var promise = excelToMysqlService.queryMysql(fixedUrl.createTable, options);
         promise.then(function(payload) {
             $(".log").append(">> Created table " + tableName + "<br />");
         }, function(errorPayload) { alert("Unable to create table " + tableName);});
@@ -244,11 +237,11 @@ function excelToMysqlCtrl($q, $scope, $location, excelToMysqlService) {
         options.databaseName = databaseName;
         options.tableName = tableName;
         options.attributes = attributes;
-        var promise = excelToMysqlService.queryMysql(insertRow, options);
+        var promise = excelToMysqlService.queryMysql(fixedUrl.insertRow, options);
         promise.then(function(payload) {
             $(".log").append(">> New row added to " + tableName + "<br />");
         }, function(errorPayload) { alert("Unable to insert row in table " + tableName + "---" + errorPayload);});
-    }
+    };
 }
 
 export default excelToMysqlCtrl;

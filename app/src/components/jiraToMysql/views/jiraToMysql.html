@@ -5,7 +5,7 @@
       <div class="panel-body">
         <p> Configuration to connect to your Jira server </p>
         <div class="form-group">
-          <label for="jiraUrl">Base Url</label>
+          <label for="jiraUrl">Jira Url</label>
           <input type="text" class="form-control" id="jiraUrl" placeholder="http://" ng-model="jiraUrl" />
         </div>
         <div class="form-group">
@@ -16,12 +16,24 @@
           <label for="jiraPassword">Password</label>
           <input type="password" class="form-control" id="jiraPassword" placeholder="Password" ng-model="jiraPassword" />
         </div>
-        <button type="button" class="btn btn-primary" ng-click="ctrl.connectToMysql()">Connect</button>
+        <button type="button" class="btn btn-primary" ng-click="ctrl.getJiraProjects()">Connect</button>
         <br/><br/>
 
-        You need to select a project here!!
+        <div class="panel panel-default" ng-show="ctrl.jiraProjects.length > 0">
+          <div class="panel-body">
+            <div class="form-group">
+              <label for="selectJiraProject">Select a JIRA Project</label>
+              <select id="selectJiraProject" ng-model="jiraProject">
+                <option ng-repeat="option in ctrl.jiraProjects" value="{{option.name}}">
+                  {{option.name}}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
+
     <div class="panel panel-default">
       <div class="panel-heading">Export to MySql</div>
       <div class="panel-body">
@@ -76,7 +88,7 @@
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" ng-click="ctrl.createADatabase()" data-dismiss="modal">Create</button>
+                    <button type="button" class="btn btn-primary" ng-click="ctrl.createDatabase()" data-dismiss="modal">Create</button>
                   </div>
                 </div>
               </div>
@@ -88,5 +100,91 @@
       </div>
     </div>
   </div>
-</div>
+
+  <div id="mapper" style="display: none" class="container-fluid">
+    <div class="row" style="text-align: center">
+      <div class="col-md-4">Tables from JIRA</div>
+      <div class="col-md-4">Object map</div>
+      <div class="col-md-4">
+        Tables in MySql
+        <a data-toggle="modal" data-target="#createTable"><i class="fa fa-plus" title="Create a new table"></i></a>
+
+        <div class="modal fade" id="createTable" tabindex="-1" role="dialog" aria-labelledby="createTableLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="createTableLabel">Create a new table</h4>
+              </div>
+              <div class="modal-body">
+                <div class="form-group">
+                  <label for="tableName">Table Name</label>
+                  <input id="tableName" type="text" class="form-control" placeholder="Project" ng-model="newTableName" />
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" ng-click="ctrl.createEmptyTable()" data-dismiss="modal">Create</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p style="float: right">
+          <button type="button" class="btn btn-primary" ng-click="ctrl.executeModel()">Start execution</button>
+        </p>
+      </div>
+    </div>
+    <hr /><br />
+
+    <div class="row" ng-repeat="jiraTable in ctrl.objectMapper" style="text-align: center">
+      <div class="col-md-4"><p class="btn btn-default" style="width: 100%;">{{jiraTable.from}}</p></div>
+      <div class="col-md-4"><p><hr class="between" style="width: 100%; border: solid 1px" /></p></div>
+      <div class="col-md-4">
+        <div ng-show="ctrl.tables.length > 0">
+          <select style="width: 80%;" ng-options="table for table in ctrl.tables" ng-model="jiraTable.to"></select>
+          <p style="float: right"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#attributeMap_{{jiraTable.from}}" title="Create attribute mappings"> >> </button></p>
+          <div class="modal fade" id="attributeMap_{{jiraTable.from}}" tabindex="-1" role="dialog" aria-labelledby="attributeMapLabel">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title" id="createAttribteMap">Create attribute map from: {{jiraTable.from}} to {{jiraTable.to}}</h4>
+                </div>
+                <div class="modal-body">
+                  <div class="row" style="text-align: center">
+                    <div class="col-md-4">Columns in the Jira {{jiraTable.from}}</div>
+                    <div class="col-md-4">Attribute map</div>
+                    <div class="col-md-4">Columns in MySql table: {{jiraTable.to}}</div>
+                  </div>
+                  <hr /><br />
+
+                  <div class="form-group row" ng-repeat="(jiraAttribute, jiraAttributeValue) in jiraTable.attributes" style="text-align: center">
+                    <div class="col-md-4"><p class="btn btn-default" style="width: 100%;">{{jiraTable.attributes[jiraAttribute].from}}</p></div>
+                    <div class="col-md-4"><p><hr class="between" style="width: 100%;" /></p></div>
+                    <div class="col-md-4">
+                      <select ng-options="column for column in ctrl.tableColumnMap[jiraTable.to]" ng-model="jiraTable.attributes[jiraAttribute].to"></select>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div ng-show="ctrl.tables == null || ctrl.tables.length == 0"><p class="btn btn-default" style="width: 100%;">{{jiraTable.from}}</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="execution" style="display: none" class="container-fluid">
+    <div class="row">
+      <div class="col-md-12"><h3>Execution status</h3></div>
+      <hr /><br /><br />
+      <div class="log" style="padding-left: 15%"></div>
+    </div>
+  </div>
 </div>
