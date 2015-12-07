@@ -1,6 +1,7 @@
 import angular from 'angular';
 import ngRoute from 'angular-route';
 
+
 import EAToMysqlCtrl from 'components/EAToMysql/EAToMysqlCtrl';
 import staticService from 'components/EAToMysql/js/staticService'
 import view from 'components/EAToMySql/view/EAToMysql.html!text';

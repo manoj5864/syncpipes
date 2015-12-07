@@ -1,25 +1,33 @@
 <div ng-controller="EAToMysqlCtrl as ctrl" ng-cloak ng-init="ctrl.init()">
 
-    <div class="panel panel-default">
+    <div class="panel panel-default" id="ea-connect">
         <div class="panel-heading">Import from EA</div>
+        <div class="alert alert-danger" role="alert" ng-show="errorFlagEA">{{ errors }}</div>
         <div class="panel-body" ng-show="(showFileUpload && !showData)">
             <p> Upload your .eap file </p>
             <form enctype="multipart/form-data">
                 <input class="btn btn-primary" id="EAFile" type="file" ng-model="EAFile" onchange="angular.element(this).scope().uploadFile(this.files)" multiple/>
             </form>
-            <button onclick="angular.element(this).scope().getModel()"> Get Model </button>
         </div>
         <div class="panel-body" ng-show="(!showFileUpload  && !showData)">
-            <div>Loading<i class="ellipsis"><i>.</i><i>.</i><i>.</i></i></div>​
-            <p> File was successfully uploaded, but it takes some time for us to extract the data. </p>
+            <div class="alert alert-info" role="alert">
+                <div>Loading<i class="ellipsis"><i>.</i><i>.</i><i>.</i></i></div>​
+                <p>File was successfully uploaded, but it takes some time for us to extract the data. </p>
+            </div>
         </div>
         <div class="panel-body" ng-show="(!showFileUpload && showData)">
-            <p> {{ JSONSchema }} </p>
+            <div class="alert alert-info" role="alert">
+                <p >Data were successfully extracted. </p>
+            </div>
+            <button type="button" class="btn btn-primary" ng-click="ctrl.repeatUpload()" >I liked it, I want to try again</button>
         </div>
+
+
     </div>
 
-    <div class="panel panel-default">
+    <div class="panel panel-default" id="db-connect" style="display: none">
         <div class="panel-heading">Export to MySql</div>
+        <div class="alert alert-danger" role="alert" ng-show="errorFlagMysql">{{ errors }}</div>
         <div class="panel-body">
             <p>Configuration to connect to your MySql</p>
             <div class="form-group">
@@ -50,34 +58,6 @@
                             </option>
                         </select>
                     </div>
-
-                    <div>
-                        <p>-- OR --</p>
-                    </div>
-
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createDB">Create a new database</button>
-
-                    <div class="modal fade" id="createDB" tabindex="-1" role="dialog" aria-labelledby="createDBLabel">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                    <h4 class="modal-title" id="myModalLabel">Create a new database</h4>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="form-group">
-                                        <label for="dbName">Password</label>
-                                        <input id="dbName" type="text" class="form-control" placeholder="TestDB" ng-model="databaseName" />
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary" ng-click="ctrl.createADatabase()" data-dismiss="modal">Create</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <br /><br />
                     <button type="button" class="btn btn-primary" ng-click="ctrl.createMapping()" ng-show="database != null">Create necessary mappings</button>
                 </div>
             </div>
