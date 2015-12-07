@@ -25,7 +25,7 @@
 
     </div>
 
-    <div class="panel panel-default" id="db-connect" style="display: none">
+    <div class="panel panel-default" id="db-connect" style="">
         <div class="panel-heading">Export to MySql</div>
         <div class="alert alert-danger" role="alert" ng-show="errorFlagMysql">{{ errors }}</div>
         <div class="panel-body">
@@ -97,7 +97,7 @@
                                     </div>
                                     <hr /><br />
 
-                                    <div class="form-group row" ng-repeat="attribute in ctrl.getAttributesOfNode(node)" style="text-align: center">
+                                    <div class="form-group row" ng-repeat="attribute in ctrl.getAttributesOfNode(ctrl.JSONSchema, node)" style="text-align: center">
                                         <div class="col-md-4"><p class="btn btn-default" style="width: 100%;">{{attribute}}</p></div>
                                         <div class="col-md-4"><p><hr class="between" style="width: 100%;" /></p></div>
                                         <div class="col-md-4">
@@ -117,12 +117,20 @@
             </div>
         </div>
     </div>
-
-    <div id="execution" style="display: none" class="container-fluid">
-        <div class="row">
-            <div class="col-md-12"><h3>Execution status</h3></div>
-            <hr /><br /><br />
-            <div class="log" style="padding-left: 15%"></div>
+    <div class="panel panel-default" id="execution" style="">
+        <div class="panel-heading">Logs</div>
+        <div class="panel-body">
+            <p>{{ctrl.infoMessage }}</p>
+            <div class="alert alert-danger" role="alert" ng-show="errorFlagExecution">
+                <div ng-repeat="(key, value) in ctrl.db_record_error_logs">
+                    <div> {{ value }} record(s) were added to the table  {{key}}  </div>
+                </div>
+            </div>
+            <div class="alert alert-info" role="alert">
+                <div ng-repeat="(key, value) in ctrl.db_record_success_logs">
+                    <div> {{ value }} record(s) were added to the table  {{key}}  </div>
+                </div>
+            </div>
         </div>
     </div>
 

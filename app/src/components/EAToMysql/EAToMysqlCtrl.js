@@ -19,7 +19,7 @@ function EAToMysqlCtrl($scope, $http, staticService) {
     $scope.showData = false;
 
     //Test data
-    //$scope.JSONSchema = JSON.parse(staticService.dataFromEA());
+    self.JSONSchema = JSON.parse(staticService.dataFromEA());
 
     self.init = function() {
         toggleLink("configLink");
@@ -61,10 +61,10 @@ function EAToMysqlCtrl($scope, $http, staticService) {
 
     self.getEAJson = function(data) {
 
-        $scope.errorFlag = false;
+        $scope.errorFlagEA = false;
         $http.get(uploadUrl+"?fileName="+data, {})
             .success(function (data) {
-                $scope.JSONSchema = JSON.parse(data);
+                self.JSONSchema = JSON.parse(data);
                 $scope.showFileUpload = false;
                 $scope.showData = true;
                 $("#db-connect").show();
@@ -72,7 +72,7 @@ function EAToMysqlCtrl($scope, $http, staticService) {
             })
             .error(function (error) {
                 $scope.errors = error;
-                $scope.errorFlag = true;
+                $scope.errorFlagEA = true;
             });
     };
 
@@ -95,7 +95,7 @@ function EAToMysqlCtrl($scope, $http, staticService) {
 
     self.getAttributesOfNode = function (obj, node) {
 
-        var keys = new Set();
+        let keys = new Set();
 
         traverse(obj[node]).forEach(function () {
             if (this.level == 2) {
@@ -110,7 +110,6 @@ function EAToMysqlCtrl($scope, $http, staticService) {
     };
 
     self.getAttributesValues = function (obj, node, attribute) {
-        var traverse = require('traverse');
         var listOfValues = [];
         for (var i = 0; i < obj[node].length; i++) {
             var value = traverse(obj[node]).get([i, attribute]);
@@ -177,12 +176,12 @@ function EAToMysqlCtrl($scope, $http, staticService) {
         for(var i=0; i<self.tables.length; i++)
             self.getColumns($scope.database, self.tables[i]);
 
-        var nodes = self.getNodes($scope.JSONSchema);
+        var nodes = self.getNodes(self.JSONSchema);
         for (var iNode=0; iNode<nodes.length; iNode++){
             var map={};
             map.from = nodes[iNode];
             map.to = null;
-            var attributes = self.getAttributesOfNode($scope.JSONSchema, nodes[iNode]);
+            var attributes = self.getAttributesOfNode(self.JSONSchema, nodes[iNode]);
             map.attributes=[];
             for (var iAttribute=0; iAttribute < attributes.length; iAttribute++){
                 var temp = {};
@@ -192,8 +191,8 @@ function EAToMysqlCtrl($scope, $http, staticService) {
             }
             self.objectMapper.push(map);
         }
-        
-        self.nodes = self.getNodes($scope.JSONSchema);
+
+        self.nodes = self.getNodes(self.JSONSchema);
     };
 
     self.updateObjectMapper = function(node, table) {
@@ -235,7 +234,7 @@ function EAToMysqlCtrl($scope, $http, staticService) {
         $("#mapper").hide();
         $("#execution").show();
 
-        var nodes = self.getNodes($scope.JSONSchema);
+        var nodes = self.getNodes(self.JSONSchema);
 
         for(var i=0; i<nodes.length; i++) {
 
@@ -246,13 +245,14 @@ function EAToMysqlCtrl($scope, $http, staticService) {
                 var temp = {};
                 for(var iAttribute=0; iAttribute<map.attributes.length; iAttribute++) {
                     if (map.attributes[iAttribute].to != null){
-                        temp[map.attributes[iAttribute].to] = self.getAttributesValues($scope.JSONSchema, nodes[i],map.attributes[iAttribute].from);
+                        temp[map.attributes[iAttribute].to] = self.getAttributesValues(self.JSONSchema, nodes[i],map.attributes[iAttribute].from);
                     }
                 }
                 self.transformAndSaveToMysql(map.to, temp);
             }
         }
-        $(".log").append("<br /><h3>Execution complete!</h3>");
+        self.infoMessage = "Data transfer has been started";
+
     }
 
     self.getMapFromObjectMapper = function(objectMapper, fromObject) {
@@ -260,17 +260,9 @@ function EAToMysqlCtrl($scope, $http, staticService) {
             if(self.objectMapper[i].from === fromObject) return self.objectMapper[i];
     }
 
-
-    self.createTable = function(databaseName, tableName, cols) {
-        var options = {};
-        options.databaseName = databaseName;
-        options.tableName = tableName;
-        options.cols = cols;
-        var promise = staticService.queryMysql(createTable, options);
-        promise.then(function(payload) {
-            $(".log").append(">> Created table " + tableName + "<br />");
-        }, function(errorPayload) { alert("Unable to create table " + tableName);});
-    }
+    self.db_record_success_logs = {};
+    self.db_record_error_logs = {};
+    $scope.errorFlagExecution = false;
 
     self.insertRow = function(databaseName, tableName, attributes) {
         var options = {};
@@ -278,9 +270,13 @@ function EAToMysqlCtrl($scope, $http, staticService) {
         options.tableName = tableName;
         options.attributes = attributes;
         var promise = staticService.queryMysql(insertRow, options);
+        
         promise.then(function(payload) {
-            $(".log").append(">> New row added to " + tableName + "<br />");
-        }, function(errorPayload) { alert("Unable to insert row in table " + tableName + "---" + errorPayload);});
+            self.db_record_success_logs[tableName] != undefined ? self.db_record_success_logs[tableName] = self.db_record_success_logs[tableName] + 1 : self.db_record_success_logs[tableName] = 1;
+        }, function(errorPayload) {
+            $scope.errorFlagExecuting = true;
+            self.db_record_error_logs[tableName] != undefined ? self.db_record_error_logs[tableName] = self.db_record_error_logs[tableName] + 1 : self.db_record_error_logs[tableName] = 1;
+        });
     }
 }
 
