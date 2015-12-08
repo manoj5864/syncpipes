@@ -1,4 +1,3 @@
-import angular from 'angular';
 import traverse from 'traverse';
 
 function EAToMysqlCtrl($scope, $http, staticService) {
@@ -15,6 +14,7 @@ function EAToMysqlCtrl($scope, $http, staticService) {
     var getColumns = "http://localhost:8084/getColumns";
     var createTable = "http://localhost:8084/createTable";
     var insertRow = "http://localhost:8084/insertRow";
+
     $scope.showFileUpload = true;
     $scope.showData = false;
 
@@ -81,18 +81,20 @@ function EAToMysqlCtrl($scope, $http, staticService) {
         $scope.showData = false;
     };
 
-    self.getNodes = function (obj) {
+    //self.getNodes = function (obj) {
+    //
+    //    var nodes = [];
+    //
+    //    traverse(obj).forEach(function () {
+    //        if (this.level == 1) {
+    //            nodes.push(this.key);
+    //        }
+    //    });
+    //    return nodes;
+    //};
 
-        var nodes = [];
-
-        traverse(obj).forEach(function () {
-            if (this.level == 1) {
-                nodes.push(this.key);
-            }
-        });
-        return nodes;
-    };
-
+    //
+    //TODO: Clean up after creating directives
     self.getAttributesOfNode = function (obj, node) {
 
         let keys = new Set();
@@ -109,14 +111,14 @@ function EAToMysqlCtrl($scope, $http, staticService) {
         return keysList;
     };
 
-    self.getAttributesValues = function (obj, node, attribute) {
-        var listOfValues = [];
-        for (var i = 0; i < obj[node].length; i++) {
-            var value = traverse(obj[node]).get([i, attribute]);
-            listOfValues.push(value);
-        }
-        return listOfValues;
-    };
+    //self.getAttributesValues = function (obj, node, attribute) {
+    //    var listOfValues = [];
+    //    for (var i = 0; i < obj[node].length; i++) {
+    //        var value = traverse(obj[node]).get([i, attribute]);
+    //        listOfValues.push(value);
+    //    }
+    //    return listOfValues;
+    //};
 
 
     $scope.$watch('database', function() {
@@ -176,12 +178,12 @@ function EAToMysqlCtrl($scope, $http, staticService) {
         for(var i=0; i<self.tables.length; i++)
             self.getColumns($scope.database, self.tables[i]);
 
-        var nodes = self.getNodes(self.JSONSchema);
+        var nodes = staticService.getNodes(self.JSONSchema);
         for (var iNode=0; iNode<nodes.length; iNode++){
             var map={};
             map.from = nodes[iNode];
             map.to = null;
-            var attributes = self.getAttributesOfNode(self.JSONSchema, nodes[iNode]);
+            var attributes = staticService.getAttributesOfNode(self.JSONSchema, nodes[iNode]);
             map.attributes=[];
             for (var iAttribute=0; iAttribute < attributes.length; iAttribute++){
                 var temp = {};
@@ -192,7 +194,7 @@ function EAToMysqlCtrl($scope, $http, staticService) {
             self.objectMapper.push(map);
         }
 
-        self.nodes = self.getNodes(self.JSONSchema);
+        self.nodes = staticService.getNodes(self.JSONSchema);
     };
 
     self.updateObjectMapper = function(node, table) {
@@ -204,7 +206,7 @@ function EAToMysqlCtrl($scope, $http, staticService) {
                 // add more logic to update the map automatically here..
             }
         }
-    }
+    };
 
     self.updateAttributeMapper = function(node, attribute, tableColumn) {
         for(var i=0; i<self.objectMapper.length; i++) {
@@ -217,6 +219,7 @@ function EAToMysqlCtrl($scope, $http, staticService) {
             }
         }
     };
+
     self.transformAndSaveToMysql = function(table, attributeValuesObj) {
         var keys = [];
         keys = Object.keys(attributeValuesObj);
@@ -227,6 +230,7 @@ function EAToMysqlCtrl($scope, $http, staticService) {
             }
             self.insertRow($scope.database, table, temp);
         }
+        self.infoMessage = "Data transfer has been completed";
     };
 
     self.executeModel = function() {
@@ -234,24 +238,22 @@ function EAToMysqlCtrl($scope, $http, staticService) {
         $("#mapper").hide();
         $("#execution").show();
 
-        var nodes = self.getNodes(self.JSONSchema);
+        var nodes = staticService.getNodes(self.JSONSchema);
 
         for(var i=0; i<nodes.length; i++) {
 
             var map = self.getMapFromObjectMapper(self.objectMapper, nodes[i]);
-
             if (map.to != null){
-                var attributeValuesList = [];
                 var temp = {};
                 for(var iAttribute=0; iAttribute<map.attributes.length; iAttribute++) {
                     if (map.attributes[iAttribute].to != null){
-                        temp[map.attributes[iAttribute].to] = self.getAttributesValues(self.JSONSchema, nodes[i],map.attributes[iAttribute].from);
+                        temp[map.attributes[iAttribute].to] = staticService.getAttributesValues(self.JSONSchema, nodes[i],map.attributes[iAttribute].from);
                     }
                 }
                 self.transformAndSaveToMysql(map.to, temp);
             }
         }
-        self.infoMessage = "Data transfer has been started";
+        self.infoMessage = "Data transfer has been started ...";
 
     }
 
