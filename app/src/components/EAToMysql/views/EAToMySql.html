@@ -6,7 +6,9 @@
         <div class="panel-body" ng-show="(showFileUpload && !showData)">
             <p> Upload your .eap file </p>
             <form enctype="multipart/form-data">
-                <input class="btn btn-primary" id="EAFile" type="file" ng-model="EAFile" onchange="angular.element(this).scope().uploadFile(this.files)" multiple/>
+                <!--<input class="btn btn-primary" id="EAFile" type="file" ng-model="EAFile" onchange="angular.element(this).scope().uploadFile(this.files)" multiple/>-->
+
+                <input file-select class="btn btn-primary" id="EAFile" type="file" ng-model="EAFile"/>
             </form>
         </div>
         <div class="panel-body" ng-show="(!showFileUpload  && !showData)">
@@ -21,7 +23,6 @@
             </div>
             <button type="button" class="btn btn-primary" ng-click="ctrl.repeatUpload()" >I liked it, I want to try again</button>
         </div>
-
 
     </div>
 

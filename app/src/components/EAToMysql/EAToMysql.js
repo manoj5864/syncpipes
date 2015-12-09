@@ -1,17 +1,20 @@
 import angular from 'angular';
 import ngRoute from 'angular-route';
 
+import EAToMysqlCtrl from 'components/EAToMysql/controllers/EAToMysqlCtrl';
+import staticService from 'components/EAToMysql/services/staticService';
+import uploadService from 'components/EAToMysql/services/uploadService';
+import view from 'components/EAToMySql/views/EAToMysql.html!text';
+import fileSelect from 'components/EAToMySql/directives/fileSelect';
 
-
-import EAToMysqlCtrl from 'components/EAToMysql/EAToMysqlCtrl';
-import staticService from 'components/EAToMysql/js/staticService'
-import view from 'components/EAToMySql/view/EAToMysql.html!text';
 const ROOT_PATH = '/EAToMysql';
 
 let moduleName = angular
     .module("EAToMySql", ['ngRoute'])
-    .controller("EAToMysqlCtrl", EAToMysqlCtrl)
     .service("staticService", ['$http', '$q', staticService])
+    .service("uploadService", [uploadService])
+    .directive('fileSelect',['uploadService', fileSelect])
+    .controller("EAToMysqlCtrl", EAToMysqlCtrl)
     .config(($routeProvider) => {
         $routeProvider.when( ROOT_PATH, {
             template: view,
