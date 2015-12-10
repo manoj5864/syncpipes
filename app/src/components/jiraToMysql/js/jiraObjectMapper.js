@@ -13,6 +13,7 @@ var jiraObjectMapper = [{
         { from: "summary", to: null},
         { from: "created", to: null},
         { from: "duedate", to: null},
+        { from: "Feature ID", to: null, customfield: true},
         { from: "issuetype", fromType: "object", fromId: "id", to: null },
         { from: "project", fromType: "object", fromId: "id", to: null},
         { from: "priority", fromType: "object", fromId: "id", to: null},
