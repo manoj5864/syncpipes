@@ -2,27 +2,30 @@
 
     <div class="panel panel-default" id="ea-connect">
         <div class="panel-heading">Import from EA</div>
-        <div class="alert alert-danger" role="alert" ng-show="errorFlagEA">{{ errors }}</div>
-        <div class="panel-body" ng-show="(showFileUpload && !showData)">
-            <p> Upload your .eap file </p>
-            <form enctype="multipart/form-data">
+        <!--<div class="alert alert-danger" role="alert" ng-show="errorFlagEA">{{ errors }}</div>-->
+        <!--<div class="panel-body" ng-show="(showFileUpload && !showData)">-->
+            <!--<p> Upload your .eap file </p>-->
+            <!--<form enctype="multipart/form-data">-->
                 <!--<input class="btn btn-primary" id="EAFile" type="file" ng-model="EAFile" onchange="angular.element(this).scope().uploadFile(this.files)" multiple/>-->
+        <div class="panel-body">
+            <p> Upload your .eap file </p>
+                <file-select url-post="{{ ctrl.uploadUrl }}"></file-select>
+        </div>
 
-                <input file-select class="btn btn-primary" id="EAFile" type="file" ng-model="EAFile"/>
-            </form>
-        </div>
-        <div class="panel-body" ng-show="(!showFileUpload  && !showData)">
-            <div class="alert alert-info" role="alert">
-                <div>Loading<i class="ellipsis"><i>.</i><i>.</i><i>.</i></i></div>​
-                <p>File was successfully uploaded, but it takes some time for us to extract the data. </p>
-            </div>
-        </div>
-        <div class="panel-body" ng-show="(!showFileUpload && showData)">
-            <div class="alert alert-info" role="alert">
-                <p >Data were successfully extracted. </p>
-            </div>
-            <button type="button" class="btn btn-primary" ng-click="ctrl.repeatUpload()" >I liked it, I want to try again</button>
-        </div>
+            <!--</form>-->
+        <!--</div>-->
+        <!--<div class="panel-body" ng-show="(!showFileUpload  && !showData)">-->
+            <!--<div class="alert alert-info" role="alert">-->
+                <!--<div>Loading<i class="ellipsis"><i>.</i><i>.</i><i>.</i></i></div>​-->
+                <!--<p>File was successfully uploaded, but it takes some time for us to extract the data. </p>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="panel-body" ng-show="(!showFileUpload && showData)">-->
+            <!--<div class="alert alert-info" role="alert">-->
+                <!--<p >Data were successfully extracted. </p>-->
+            <!--</div>-->
+            <!--<button type="button" class="btn btn-primary" ng-click="ctrl.repeatUpload()" >I liked it, I want to try again</button>-->
+        <!--</div>-->
 
     </div>
 
@@ -129,7 +132,7 @@
             </div>
             <div class="alert alert-info" role="alert">
                 <div ng-repeat="(key, value) in ctrl.db_record_success_logs">
-                    <div> {{ value }} record(s) were added to the table  {{key}}  </div>
+                    <div> {{ value }} error(s) were traced in the table  {{key}}  </div>
                 </div>
             </div>
         </div>

@@ -1,9 +1,9 @@
 import traverse from 'traverse';
 
-function EAToMysqlCtrl($scope, $http, staticService) {
+let EAToMysqlCtrl = function ($scope, $http, staticService, jsonDataFactory) {
     "use strict";
     var self = this;
-    var uploadUrl = "http://localhost:51248/api/repository/";
+    self.uploadUrl = "http://localhost:9000/api/repository/";
     self.EAFile = null;
     self.databases = null;
     self.tableColumnMap = {};
@@ -19,7 +19,8 @@ function EAToMysqlCtrl($scope, $http, staticService) {
     $scope.showData = false;
 
     //Test data
-    self.JSONSchema = JSON.parse(staticService.dataFromEA());
+    //self.JSONSchema = JSON.parse(staticService.dataFromEA());
+
 
     self.init = function() {
         toggleLink("configLink");
@@ -30,34 +31,6 @@ function EAToMysqlCtrl($scope, $http, staticService) {
         self.EAFile = fileInput.files[0];
     };
 
-    $scope.uploadFile = function(files) {
-        var fd = new FormData();
-
-        fd.append("file", files[0]);
-        $scope.errorFlag = false;
-        $http.post(uploadUrl, fd, {
-            headers: { 'Content-Type': undefined },
-            transformRequest: angular.identity
-            }).success(function (data) {
-                self.getEAJson(data);
-                $scope.showFileUpload = false;
-            })
-            .error(function (error) {
-                $scope.errors = error;
-                $scope.errorFlag = true;
-            }).catch(function(error){
-                $scope.errorFlagEA = true;
-                if (error.status == 400){
-                    $scope.errors = "Oops ... Wrong file type!";
-                }
-                else {
-                    $scope.errors = "No connection to the server were esteblished. Check if the server is running and try again!";
-                }
-
-
-        });
-
-    };
 
     self.getEAJson = function(data) {
 
@@ -178,12 +151,12 @@ function EAToMysqlCtrl($scope, $http, staticService) {
         for(var i=0; i<self.tables.length; i++)
             self.getColumns($scope.database, self.tables[i]);
 
-        var nodes = staticService.getNodes(self.JSONSchema);
+        var nodes = staticService.getNodes(jsonDataFactory.getData());
         for (var iNode=0; iNode<nodes.length; iNode++){
             var map={};
             map.from = nodes[iNode];
             map.to = null;
-            var attributes = staticService.getAttributesOfNode(self.JSONSchema, nodes[iNode]);
+            var attributes = staticService.getAttributesOfNode(jsonDataFactory.getData(), nodes[iNode]);
             map.attributes=[];
             for (var iAttribute=0; iAttribute < attributes.length; iAttribute++){
                 var temp = {};
@@ -194,7 +167,7 @@ function EAToMysqlCtrl($scope, $http, staticService) {
             self.objectMapper.push(map);
         }
 
-        self.nodes = staticService.getNodes(self.JSONSchema);
+        self.nodes = staticService.getNodes(jsonDataFactory.getData());
     };
 
     self.updateObjectMapper = function(node, table) {
@@ -282,4 +255,10 @@ function EAToMysqlCtrl($scope, $http, staticService) {
     }
 }
 
-export default EAToMysqlCtrl;
+export default [
+    '$scope',
+    '$http',
+    'staticService',
+    'jsonDataFactory',
+    EAToMysqlCtrl
+];
