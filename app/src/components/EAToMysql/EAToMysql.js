@@ -7,6 +7,8 @@ import jsonDataFactory from 'components/EAToMysql/services/jsonDataFactory';
 import uploadService from 'components/EAToMysql/services/uploadService';
 import view from 'components/EAToMySql/views/EAToMysql.html!text';
 import fileSelect from 'components/EAToMySql/directives/fileSelect';
+import attrMapper from 'components/EAToMySql/directives/attrMapper';
+import mapper from 'components/EAToMySql/directives/mapper';
 
 const ROOT_PATH = '/EAToMysql';
 
@@ -17,6 +19,9 @@ let moduleName = angular
     .factory("jsonDataFactory", jsonDataFactory)
     .service("uploadService",['$http','$q', 'jsonDataFactory', uploadService])
     .directive("fileSelect",['uploadService','jsonDataFactory', fileSelect])
+    .directive("attrMapper",['staticService','jsonDataFactory', attrMapper])
+    .directive("mapper",['staticService','jsonDataFactory', mapper])
+
 
     .config(($routeProvider) => {
         $routeProvider.when( ROOT_PATH, {

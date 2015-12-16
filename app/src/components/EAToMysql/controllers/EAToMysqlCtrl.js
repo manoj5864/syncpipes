@@ -3,24 +3,19 @@ import traverse from 'traverse';
 let EAToMysqlCtrl = function ($scope, $http, staticService, jsonDataFactory) {
     "use strict";
     var self = this;
-    self.uploadUrl = "http://localhost:9000/api/repository/";
-    self.EAFile = null;
-    self.databases = null;
     self.tableColumnMap = {};
     self.objectMapper = [];
-    var mysqlConnectionServer = "http://localhost:8084/connectToMysql";
-    var mysqlCreateDB = "http://localhost:8084/createADatabase";
-    var getTables = "http://localhost:8084/getTables";
-    var getColumns = "http://localhost:8084/getColumns";
-    var createTable = "http://localhost:8084/createTable";
-    var insertRow = "http://localhost:8084/insertRow";
 
-    $scope.showFileUpload = true;
-    $scope.showData = false;
+    //var mysqlConnectionServer = "http://localhost:8084/connectToMysql";
+    //var mysqlCreateDB = "http://localhost:8084/createADatabase";
+    //var getTables = "http://localhost:8084/getTables";
+    //var getColumns = "http://localhost:8084/getColumns";
+    //var createTable = "http://localhost:8084/createTable";
+    //var insertRow = "http://localhost:8084/insertRow";
 
     //Test data
-    //self.JSONSchema = JSON.parse(staticService.dataFromEA());
-
+    //
+    jsonDataFactory.setData(JSON.parse(staticService.dataFromEA()));
 
     self.init = function() {
         toggleLink("configLink");

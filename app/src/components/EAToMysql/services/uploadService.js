@@ -2,8 +2,9 @@ let uploadService = function($http, $q, jsonDataFactory) {
     "use strict";
 
     var service = this;
+    var url = "http://localhost:9000/api/repository/";
 
-    service.upload = function (file, url) {
+    service.upload = function (file) {
         var fd = new FormData();
         fd.append("file", file);
         var deferred = $q.defer();
