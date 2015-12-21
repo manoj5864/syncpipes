@@ -67,7 +67,17 @@
             <!--</div>-->
         <!--</div>-->
     <!--</div>-->
-    <mapper></mapper>
+    <div id="mapper" class="container-fluid" ng-hide="hidden">
+        <div class="row" style="text-align: center">
+            <div class="col-md-4">Entities in the EA</div>
+            <div class="col-md-4">Object map</div>
+            <div class="col-md-4">
+                Tables in MySql
+                <p style="float: right"><button type="button" class="btn btn-primary" ng-click="ctrl.executeModel()">Start execution</button></p>
+            </div>
+        </div>
+        <mapper></mapper>
+    </div>
     <!--<div id="mapper" style="display: none" class="container-fluid">-->
         <!--<div class="row" style="text-align: center">-->
             <!--<div class="col-md-4">Entities in the EA</div>-->

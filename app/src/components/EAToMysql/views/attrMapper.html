@@ -1,3 +1,4 @@
+<div class="modal-content">
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     <h4 class="modal-title" id="createAttribteMap">Create attribute map from: {{node}} to {{table}}</h4>
@@ -8,17 +9,16 @@
         <div class="col-md-4">Attribute map</div>
         <div class="col-md-4">Columns in MySql table: {{table}}</div>
     </div>
-    <hr /><br />
-
-    <div class="form-group row" ng-repeat="attribute in ctrl.getAttributesOfNode(ctrl.JSONSchema, node)" style="text-align: center">
-        <div class="col-md-4"><p class="btn btn-default" style="width: 100%;">{{attribute}}</p></div>
+    <div class="form-group row" ng-repeat="attribute in nodeAttrs" style="text-align: center">
+        <div class="col-md-4"><p class="btn btn-default" style="width: 100%;">{{attribute}}</div>
         <div class="col-md-4"><p><hr class="between" style="width: 100%;" /></p></div>
         <div class="col-md-4">
-            <select ng-if="table !== undefined" ng-options="column.Field for column in ctrl.tableColumnMap[table]" ng-model="column" ng-change="ctrl.updateAttributeMapper(node, attribute, column.Field)"></select>
+            <select ng-if="table !== undefined" ng-options="column.Field for column in fields" ng-model="field" ng-change="update(node, attribute, field)"></select>
         </div>
     </div>
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
     <button type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
+</div>
 </div>

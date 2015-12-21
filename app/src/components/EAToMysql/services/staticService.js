@@ -31,8 +31,6 @@ function staticService ($http, $q) {
         return deferred.promise;
     };
 
-    var POST = "POST";
-
     //self.connectToMysql = function() {
     //    var options = {};
     //    options.baseUrl = $scope.baseUrl;
@@ -60,14 +58,7 @@ function staticService ($http, $q) {
         var options = {};
         options.databaseName = MYSQL.dbName;
         options.tableName = tableName;
-        var promise = queryMysql(MYSQL.getColumns, options);
-        promise.then(function(payload) {
-            //self.tableColumnMap[tableName] = payload; //Field, Type, Null, Key, Default, Extra
-            return payload;
-        }, function(errorPayload) {
-            return errorPayload;
-
-        });
+        return queryMysql(MYSQL.getColumns, options);
     };
 
     service.getNodes = function (obj) {
@@ -83,9 +74,7 @@ function staticService ($http, $q) {
     };
 
     service.getAttributesOfNode = function (obj, node) {
-
         var keys = new Set();
-
         traverse(obj[node]).forEach(function () {
             if (this.level == 2) {
                 keys.add(this.key);
