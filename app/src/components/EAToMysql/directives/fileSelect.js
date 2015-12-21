@@ -9,6 +9,10 @@ export default function fileSelect(uploadService, jsonDataFactory){
             scope.status = 'success';
             scope.message = "Data already loaded";
         }
+        else{
+            scope.status = 'empty';
+            scope.message = "Upload your .eap file";
+        }
         element.bind('change', function (event) {
             var files = event.target.files;
             var promise = uploadService.upload(files[0]);

@@ -10,6 +10,7 @@ import view from 'components/EAToMySql/views/EAToMysql.html!text';
 import fileSelect from 'components/EAToMySql/directives/fileSelect';
 import attrMapper from 'components/EAToMySql/directives/attrMapper';
 import mapper from 'components/EAToMySql/directives/mapper';
+import execute from 'components/EAToMySql/directives/execute';
 
 const ROOT_PATH = '/EAToMysql';
 
@@ -23,6 +24,7 @@ let moduleName = angular
     .directive("fileSelect",['uploadService','jsonDataFactory', fileSelect])
     .directive("mapper",['staticService','jsonDataFactory', 'objectMapperFactory', mapper])
     .directive("attrMapper",['staticService','jsonDataFactory','objectMapperFactory', attrMapper])
+    .directive("execute",['staticService','jsonDataFactory','objectMapperFactory', execute])
 
 
     .config(($routeProvider) => {

@@ -1,10 +1,19 @@
     <input class="btn btn-primary" id="ea_file_input" type="file" multiple ng-hide="status=='success'"/>
+    <div ng-if="status=='empty'">
+        <p>
+            {{ message }}
+        </p>
+    </div>
     <div ng-if="status=='success'">
-        {{ message }}
+        <p>
+            {{ message }}
+        </p>
         <button type="button" class="btn btn-primary" ng-click="ctrl.repeatUpload()" >I want to export data again</button>
     </div>
     <div ng-if="status=='fail'">
+        <p>
         {{ message }}
+        </p>
     </div>
     <div ng-if="status=='loading'">
         {{ message }}<i class="ellipsis"><i>.</i><i>.</i><i>.</i></i>

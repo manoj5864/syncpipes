@@ -3,51 +3,41 @@ import traverse from 'traverse';
 let EAToMysqlCtrl = function ($scope, $http, staticService, jsonDataFactory, objectMapperFactory) {
     "use strict";
     var self = this;
-    self.tableColumnMap = {};
-    self.objectMapper = [];
-
-    //var mysqlConnectionServer = "http://localhost:8084/connectToMysql";
-    //var mysqlCreateDB = "http://localhost:8084/createADatabase";
-    //var getTables = "http://localhost:8084/getTables";
-    //var getColumns = "http://localhost:8084/getColumns";
-    //var createTable = "http://localhost:8084/createTable";
-    //var insertRow = "http://localhost:8084/insertRow";
-
     //Test data
     //
     jsonDataFactory.setData(JSON.parse(staticService.dataFromEA()));
 
-    self.init = function() {
-        toggleLink("configLink");
-    };
-
-    $scope.selectEAFile = function() {
-        self.fileInput = document.getElementById('EAFile');
-        self.EAFile = fileInput.files[0];
-    };
-
-
-    self.getEAJson = function(data) {
-
-        $scope.errorFlagEA = false;
-        $http.get(uploadUrl+"?fileName="+data, {})
-            .success(function (data) {
-                self.JSONSchema = JSON.parse(data);
-                $scope.showFileUpload = false;
-                $scope.showData = true;
-                $("#db-connect").show();
-
-            })
-            .error(function (error) {
-                $scope.errors = error;
-                $scope.errorFlagEA = true;
-            });
-    };
-
-    self.repeatUpload = function(){
-        $scope.showFileUpload = true;
-        $scope.showData = false;
-    };
+    //self.init = function() {
+    //    toggleLink("configLink");
+    //};
+    //
+    //$scope.selectEAFile = function() {
+    //    self.fileInput = document.getElementById('EAFile');
+    //    self.EAFile = fileInput.files[0];
+    //};
+    //
+    //
+    //self.getEAJson = function(data) {
+    //
+    //    $scope.errorFlagEA = false;
+    //    $http.get(uploadUrl+"?fileName="+data, {})
+    //        .success(function (data) {
+    //            self.JSONSchema = JSON.parse(data);
+    //            $scope.showFileUpload = false;
+    //            $scope.showData = true;
+    //            $("#db-connect").show();
+    //
+    //        })
+    //        .error(function (error) {
+    //            $scope.errors = error;
+    //            $scope.errorFlagEA = true;
+    //        });
+    //};
+    //
+    //self.repeatUpload = function(){
+    //    $scope.showFileUpload = true;
+    //    $scope.showData = false;
+    //};
 
     //self.getNodes = function (obj) {
     //
@@ -204,30 +194,27 @@ let EAToMysqlCtrl = function ($scope, $http, staticService, jsonDataFactory, obj
         toggleLink("executionLink");
         $("#mapper").hide();
         $("#execution").show();
-        console.log(objectMapperFactory.getData());
-        //var nodes = staticService.getNodes(self.JSONSchema);
-        //
-        //for(var i=0; i<nodes.length; i++) {
-        //
-        //    var map = self.getMapFromObjectMapper(self.objectMapper, nodes[i]);
-        //    if (map.to != null){
-        //        var temp = {};
-        //        for(var iAttribute=0; iAttribute<map.attributes.length; iAttribute++) {
-        //            if (map.attributes[iAttribute].to != null){
-        //                temp[map.attributes[iAttribute].to] = staticService.getAttributesValues(self.JSONSchema, nodes[i],map.attributes[iAttribute].from);
-        //            }
-        //        }
-        //        self.transformAndSaveToMysql(map.to, temp);
-        //    }
-        //}
-        //self.infoMessage = "Data transfer has been started ...";
+        var nodes = staticService.getNodes(jsonDataFactory.getData());
+        for(var i=0; i<nodes.length; i++) {
+            var map = self.getMapFromObjectMapper(self.objectMapper, nodes[i]);
+            if (map.to != null){
+                var temp = {};
+                for(var iAttribute=0; iAttribute<map.attributes.length; iAttribute++) {
+                    if (map.attributes[iAttribute].to != null){
+                        temp[map.attributes[iAttribute].to] = staticService.getAttributesValues(self.JSONSchema, nodes[i],map.attributes[iAttribute].from);
+                    }
+                }
+                self.transformAndSaveToMysql(map.to, temp);
+            }
+        }
+        self.infoMessage = "Data transfer has been started ...";
 
-    }
+    };
 
     self.getMapFromObjectMapper = function(objectMapper, fromObject) {
         for(var i=0; i<self.objectMapper.length; i++)
             if(self.objectMapper[i].from === fromObject) return self.objectMapper[i];
-    }
+    };
 
     self.db_record_success_logs = {};
     self.db_record_error_logs = {};
@@ -239,7 +226,7 @@ let EAToMysqlCtrl = function ($scope, $http, staticService, jsonDataFactory, obj
         options.tableName = tableName;
         options.attributes = attributes;
         var promise = staticService.queryMysql(insertRow, options);
-        
+
         promise.then(function(payload) {
             self.db_record_success_logs[tableName] != undefined ? self.db_record_success_logs[tableName] = self.db_record_success_logs[tableName] + 1 : self.db_record_success_logs[tableName] = 1;
         }, function(errorPayload) {
@@ -247,7 +234,7 @@ let EAToMysqlCtrl = function ($scope, $http, staticService, jsonDataFactory, obj
             self.db_record_error_logs[tableName] != undefined ? self.db_record_error_logs[tableName] = self.db_record_error_logs[tableName] + 1 : self.db_record_error_logs[tableName] = 1;
         });
     }
-}
+};
 
 export default [
     '$scope',

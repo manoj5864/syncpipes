@@ -1,0 +1,31 @@
+<div class="panel">
+    <div class="panel-body">
+       <button type="button" class="btn btn-primary" ng-click="execute()">Start execution</button>
+       <button type="button" class="btn btn-default" ng-click="">Cancel configuration</button>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <!--ng-if="status='started'"-->
+    <div class="panel-heading">Logs</div>
+    <div class="panel-body">
+        <p>{{infoMessage }}</p>
+        <div class="alert alert-danger" role="alert" ng-show="errorFlagExecution">
+            <div ng-repeat="(key, value) in db_record_error_logs">
+                <div> {{ value }} error(s) were traced in the table  {{key}}  </div>
+            </div>
+        </div>
+        <div class="alert alert-info" role="alert">
+            <div ng-repeat="(key, value) in db_record_success_logs">
+                <div> {{ value }} record(s) were added to the table  {{key}}  </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="panel">
+    <div class="panel-body">
+        <button type="button" class="btn btn-primary" ng-click="">I want to get data from another source</button>
+        <button type="button" class="btn btn-default" ng-click="">All data is uploaded, show me your work finally!</button>
+    </div>
+</div>

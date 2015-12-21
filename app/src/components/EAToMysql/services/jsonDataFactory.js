@@ -22,6 +22,6 @@ let  jsonDataFactory = function () {
         }
     };
 
-}
+};
 
 export default jsonDataFactory;

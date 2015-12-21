@@ -61,6 +61,14 @@ function staticService ($http, $q) {
         return queryMysql(MYSQL.getColumns, options);
     };
 
+    service.insertRow = function(tableName, attributes) {
+        var options = {};
+        options.databaseName = MYSQL.dbName;
+        options.tableName = tableName;
+        options.attributes = attributes;
+        return queryMysql(MYSQL.insertRow, options);
+    };
+
     service.getNodes = function (obj) {
 
         var nodes = [];
