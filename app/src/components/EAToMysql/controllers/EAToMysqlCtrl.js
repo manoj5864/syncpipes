@@ -5,7 +5,7 @@ let EAToMysqlCtrl = function ($scope, $http, staticService, jsonDataFactory, obj
     var self = this;
     //Test data
     //
-    jsonDataFactory.setData(JSON.parse(staticService.dataFromEA()));
+    //jsonDataFactory.setData(JSON.parse(staticService.dataFromEA()));
 
     //self.init = function() {
     //    toggleLink("configLink");
@@ -177,63 +177,63 @@ let EAToMysqlCtrl = function ($scope, $http, staticService, jsonDataFactory, obj
     //    }
     //};
 
-    self.transformAndSaveToMysql = function(table, attributeValuesObj) {
-        var keys = [];
-        keys = Object.keys(attributeValuesObj);
-        for (var i=0; i<attributeValuesObj[keys[0]].length; i++){
-            var temp= {};
-            for (var j=0; j<keys.length;j++){
-                temp[keys[j]] = attributeValuesObj[keys[j]][i];
-            }
-            self.insertRow($scope.database, table, temp);
-        }
-        self.infoMessage = "Data transfer has been completed";
-    };
-
-    self.executeModel = function() {
-        toggleLink("executionLink");
-        $("#mapper").hide();
-        $("#execution").show();
-        var nodes = staticService.getNodes(jsonDataFactory.getData());
-        for(var i=0; i<nodes.length; i++) {
-            var map = self.getMapFromObjectMapper(self.objectMapper, nodes[i]);
-            if (map.to != null){
-                var temp = {};
-                for(var iAttribute=0; iAttribute<map.attributes.length; iAttribute++) {
-                    if (map.attributes[iAttribute].to != null){
-                        temp[map.attributes[iAttribute].to] = staticService.getAttributesValues(self.JSONSchema, nodes[i],map.attributes[iAttribute].from);
-                    }
-                }
-                self.transformAndSaveToMysql(map.to, temp);
-            }
-        }
-        self.infoMessage = "Data transfer has been started ...";
-
-    };
-
-    self.getMapFromObjectMapper = function(objectMapper, fromObject) {
-        for(var i=0; i<self.objectMapper.length; i++)
-            if(self.objectMapper[i].from === fromObject) return self.objectMapper[i];
-    };
-
-    self.db_record_success_logs = {};
-    self.db_record_error_logs = {};
-    $scope.errorFlagExecution = false;
-
-    self.insertRow = function(databaseName, tableName, attributes) {
-        var options = {};
-        options.databaseName = databaseName;
-        options.tableName = tableName;
-        options.attributes = attributes;
-        var promise = staticService.queryMysql(insertRow, options);
-
-        promise.then(function(payload) {
-            self.db_record_success_logs[tableName] != undefined ? self.db_record_success_logs[tableName] = self.db_record_success_logs[tableName] + 1 : self.db_record_success_logs[tableName] = 1;
-        }, function(errorPayload) {
-            $scope.errorFlagExecuting = true;
-            self.db_record_error_logs[tableName] != undefined ? self.db_record_error_logs[tableName] = self.db_record_error_logs[tableName] + 1 : self.db_record_error_logs[tableName] = 1;
-        });
-    }
+    //self.transformAndSaveToMysql = function(table, attributeValuesObj) {
+    //    var keys = [];
+    //    keys = Object.keys(attributeValuesObj);
+    //    for (var i=0; i<attributeValuesObj[keys[0]].length; i++){
+    //        var temp= {};
+    //        for (var j=0; j<keys.length;j++){
+    //            temp[keys[j]] = attributeValuesObj[keys[j]][i];
+    //        }
+    //        self.insertRow($scope.database, table, temp);
+    //    }
+    //    self.infoMessage = "Data transfer has been completed";
+    //};
+    //
+    //self.executeModel = function() {
+    //    toggleLink("executionLink");
+    //    $("#mapper").hide();
+    //    $("#execution").show();
+    //    var nodes = staticService.getNodes(jsonDataFactory.getData());
+    //    for(var i=0; i<nodes.length; i++) {
+    //        var map = self.getMapFromObjectMapper(self.objectMapper, nodes[i]);
+    //        if (map.to != null){
+    //            var temp = {};
+    //            for(var iAttribute=0; iAttribute<map.attributes.length; iAttribute++) {
+    //                if (map.attributes[iAttribute].to != null){
+    //                    temp[map.attributes[iAttribute].to] = staticService.getAttributesValues(self.JSONSchema, nodes[i],map.attributes[iAttribute].from);
+    //                }
+    //            }
+    //            self.transformAndSaveToMysql(map.to, temp);
+    //        }
+    //    }
+    //    self.infoMessage = "Data transfer has been started ...";
+    //
+    //};
+    //
+    //self.getMapFromObjectMapper = function(objectMapper, fromObject) {
+    //    for(var i=0; i<self.objectMapper.length; i++)
+    //        if(self.objectMapper[i].from === fromObject) return self.objectMapper[i];
+    //};
+    //
+    //self.db_record_success_logs = {};
+    //self.db_record_error_logs = {};
+    //$scope.errorFlagExecution = false;
+    //
+    //self.insertRow = function(databaseName, tableName, attributes) {
+    //    var options = {};
+    //    options.databaseName = databaseName;
+    //    options.tableName = tableName;
+    //    options.attributes = attributes;
+    //    var promise = staticService.queryMysql(insertRow, options);
+    //
+    //    promise.then(function(payload) {
+    //        self.db_record_success_logs[tableName] != undefined ? self.db_record_success_logs[tableName] = self.db_record_success_logs[tableName] + 1 : self.db_record_success_logs[tableName] = 1;
+    //    }, function(errorPayload) {
+    //        $scope.errorFlagExecuting = true;
+    //        self.db_record_error_logs[tableName] != undefined ? self.db_record_error_logs[tableName] = self.db_record_error_logs[tableName] + 1 : self.db_record_error_logs[tableName] = 1;
+    //    });
+    //}
 };
 
 export default [

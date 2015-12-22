@@ -10,8 +10,19 @@ export default function execute(staticService, jsonDataFactory, objectMapperFact
     var linker = function (scope, element, attrs) {
         scope.db_record_success_logs = {};
         scope.db_record_error_logs = {};
-        scope.errorFlagExecution = false;
+        scope.db_record_success_logs_exists = false;
+        scope.db_record_error_logs_exists = false;
 
+        scope.hidden=objectMapperFactory.isEmpty();
+        scope.$on('mapperBroadcast', function() {
+            scope.hidden=objectMapperFactory.isEmpty();
+        });
+
+
+        scope.clean = function(){
+            objectMapperFactory.clear();
+            jsonDataFactory.clear();
+        };
         scope.execute = function(){
             var nodes = staticService.getNodes(jsonDataFactory.getData());
             for(var i=0; i<nodes.length; i++) {
@@ -38,13 +49,14 @@ export default function execute(staticService, jsonDataFactory, objectMapperFact
                     temp[keys[j]] = attributeValuesObj[keys[j]][i];
                 }
                 staticService.insertRow(table, temp).then(function(payload) {
+                    scope.db_record_success_logs_exists=true;
                     scope.db_record_success_logs[table] != undefined ? scope.db_record_success_logs[table] = scope.db_record_success_logs[table] + 1 : scope.db_record_success_logs[table] = 1;
                     scope.infoMessage = "Data transfer has been completed";
                 }, function(errorPayload) {
-                    scope.errorFlagExecuting = true;
+                    scope.db_record_error_logs_exists = true;
                     scope.db_record_error_logs[table] != undefined ? scope.db_record_error_logs[table] = scope.db_record_error_logs[table] + 1 : scope.db_record_error_logs[table] = 1;
+                    scope.infoMessage = "Data transfer has been interapted";
                 });
-
             }
 
         }
@@ -57,7 +69,8 @@ export default function execute(staticService, jsonDataFactory, objectMapperFact
             execute:'=',
             db_record_success_logs:'=',
             db_record_error_logs: '=',
-            errorFlagExecution: '='
+            errorFlagExecution: '=',
+            hidden: "="
         },
         template: template
     };

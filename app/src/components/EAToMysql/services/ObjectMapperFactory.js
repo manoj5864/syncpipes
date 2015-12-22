@@ -1,4 +1,4 @@
-let  objectMapperFactory = function (staticService) {
+let  objectMapperFactory = function (staticService, $rootScope) {
     "use strict";
     var objectMapper = [];
     return {
@@ -21,6 +21,7 @@ let  objectMapperFactory = function (staticService) {
                 }
                 objectMapper.push(map);
             }
+            $rootScope.$broadcast('mapperBroadcast');
         },
         updateNodes: function(node, table){
             for(var i=0; i<objectMapper.length; i++) {
@@ -31,7 +32,7 @@ let  objectMapperFactory = function (staticService) {
                     // add more logic to update the map automatically here..
                 }
             }
-
+            $rootScope.$broadcast('mapperBroadcast');
         },
         updateAttributes: function(node, attribute, field){
 
@@ -44,18 +45,20 @@ let  objectMapperFactory = function (staticService) {
                     // add more logic to update the map automatically here..
                 }
             }
-
+            $rootScope.$broadcast('mapperBroadcast');
         },
         isEmpty: function() {
-            return objectMapper.length != 0;
+            return objectMapper.length == 0;
         },
         clear: function() {
             objectMapper = [];
+            $rootScope.$broadcast('mapperBroadcast');
         }
     };
 
 };
 objectMapperFactory.$inject = [
-    'StaticService'
+    'StaticService',
+    '$rootScope'
 ];
 export default objectMapperFactory;

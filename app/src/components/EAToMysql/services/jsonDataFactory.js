@@ -1,5 +1,5 @@
 
-let  jsonDataFactory = function () {
+let  jsonDataFactory = function ($rootScope) {
     "use strict";
     var JSONSchema = null;
     return {
@@ -8,7 +8,7 @@ let  jsonDataFactory = function () {
         },
         setData: function(data) {
             JSONSchema = data;
-
+            $rootScope.$broadcast('sourceBroadcast');
         },
         isEmpty: function() {
             for(var prop in JSONSchema) {
@@ -19,9 +19,10 @@ let  jsonDataFactory = function () {
         },
         clear: function() {
             JSONSchema = null;
+            $rootScope.$broadcast('sourceBroadcast');
         }
     };
 
 };
-
+jsonDataFactory.$inject = ['$rootScope'];
 export default jsonDataFactory;
