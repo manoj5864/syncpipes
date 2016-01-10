@@ -3,7 +3,7 @@ import traverse from 'traverse';
 function EAToMysqlCtrl($scope, $http, staticService) {
     "use strict";
     var self = this;
-    var uploadUrl = "http://localhost:51248/api/repository/";
+    var uploadUrl = "http://localhost:9000/api/repository/";
     self.EAFile = null;
     self.databases = null;
     self.tableColumnMap = {};
