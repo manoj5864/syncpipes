@@ -224,7 +224,7 @@ function jiraToMysqlCtrl($q, $scope, $location, jiraToMysqlService) {
         for(var i=0; i<self.objectMapper.length; i++) {
             var map = self.objectMapper[i];
             var jiraPath = getJiraPath(map.from);
-            if(map.from === "issue") jiraPath += $scope.jiraProject;
+            if(map.from === "issue") jiraPath += $scope.jiraProject + "&expand=names";
             createRowfromJiraPath(map, jiraPath);
         }
         $(".log").append("<br /><h3>Execution complete!</h3>");
@@ -234,18 +234,22 @@ function jiraToMysqlCtrl($q, $scope, $location, jiraToMysqlService) {
         jiraOptions.path = jiraPath;
         var promise = jiraToMysqlService.requestHttp(jiraOptions);
         promise.then(function(payload) {
-            if(map.from === "issue") payload = payload.issues;
+            var names = {};
+            if(map.from === "issue") {
+                names = payload.names;
+                payload = payload.issues;
+            }
             for(var j=0; j<payload.length; j++) {
                 var res = payload[j];
                 var attributes = {};
                 for (var k=0; k<map.attributes.length; k++)
-                    attributes[map.attributes[k].to] = getAttributeValue(res, map.attributes[k]);
+                    attributes[map.attributes[k].to] = getAttributeValue(res, map.attributes[k], names);
                 self.insertRow($scope.database, map.to, attributes);
             }
         }, function(errorPayload) { alert("Unable to connect to JIRA");});
     }
 
-    function getAttributeValue(res, aMap) {
+    function getAttributeValue(res, aMap, namesMap) {
         if(res.hasOwnProperty(aMap.from)) {
             if(aMap.fromType === "object") return res[aMap.from][aMap.fromId];
             else if(aMap.fromType === "arrayOfObjects") {
@@ -253,11 +257,25 @@ function jiraToMysqlCtrl($q, $scope, $location, jiraToMysqlService) {
                 for(var i=0; i<res[aMap.from].length; i++)
                     ids.push(res[aMap.from][i][aMap.fromId])
                 return ids;
-            }
-            else return res[aMap.from];
+            } else return res[aMap.from];
         } else if(res.hasOwnProperty("fields") && res.fields.hasOwnProperty(aMap.from)){
-            return getAttributeValue(res.fields, aMap);
+            return getAttributeValue(res.fields, aMap, namesMap);
+        } else if(aMap.customfield) {
+            var cv = getKeyForValue(namesMap, aMap.from);
+            if(cv != null) return res.fields[cv];
         }
+    }
+
+    function getKeyForValue(json, value) {
+        for(var key in json) {
+            if(key.indexOf("customfield") > -1) {
+                if (typeof (json[key]) === "object")
+                    return getKeyForValue(json[key], value);
+                else if (json[key] === value)
+                    return key;
+            }
+        }
+        return null;
     }
 }
 
