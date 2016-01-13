@@ -4,16 +4,21 @@ function staticService ($http, $q) {
 
     var service = this;
 
-    var mysqlConnectionServer = "http://localhost:8084/connectToMysql";
-    var mysqlCreateDB = "http://localhost:8084/createADatabase";
+    const MYSQL = {
+        dbName: "amelie_sdb",
+        mysqlConnectionServer: "http://localhost:8084/connectToMysql",
+        mysqlCreateDB : "http://localhost:8084/createADatabase",
+        getTables : "http://localhost:8084/getTables",
+        getColumns: "http://localhost:8084/getColumns",
+        createTable: "http://localhost:8084/createTable",
+        insertRow : "http://localhost:8084/insertRow"
+    };
 
-    var POST = "POST";
-
-    service.queryMysql = function (url, options) {
+    let queryMysql = function (url, options) {
         var deferred = $q.defer();
         $http({
             url: url,
-            method: POST,
+            method: "POST",
             async: false,
             data: options,
             dataType: "json",
@@ -24,6 +29,44 @@ function staticService ($http, $q) {
             deferred.reject(msg);
         });
         return deferred.promise;
+    };
+
+    //self.connectToMysql = function() {
+    //    var options = {};
+    //    options.baseUrl = $scope.baseUrl;
+    //    options.port = $scope.port;
+    //    options.userName = $scope.userName;
+    //    options.password = $scope.password;
+    //    var promise = staticService.queryMysql(mysqlConnectionServer, options);
+    //    promise.then(
+    //        function(payload) { self.databases = payload; },
+    //        function(error) {
+    //            $scope.errors = "No connection to the mysql server were established. Check if the server is running and try again!"
+    //            $scope.errorFlagMysql = true;
+    //        }
+    //    );
+    //};
+
+    service.getTables = function() {
+        var options = {};
+        options.databaseName = MYSQL.dbName;
+        return queryMysql(MYSQL.getTables, options);
+
+    };
+
+    service.getColumns = function(tableName) {
+        var options = {};
+        options.databaseName = MYSQL.dbName;
+        options.tableName = tableName;
+        return queryMysql(MYSQL.getColumns, options);
+    };
+
+    service.insertRow = function(tableName, attributes) {
+        var options = {};
+        options.databaseName = MYSQL.dbName;
+        options.tableName = tableName;
+        options.attributes = attributes;
+        return queryMysql(MYSQL.insertRow, options);
     };
 
     service.getNodes = function (obj) {
@@ -39,9 +82,7 @@ function staticService ($http, $q) {
     };
 
     service.getAttributesOfNode = function (obj, node) {
-
         var keys = new Set();
-
         traverse(obj[node]).forEach(function () {
             if (this.level == 2) {
                 keys.add(this.key);

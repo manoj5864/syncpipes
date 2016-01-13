@@ -1,17 +1,32 @@
 import angular from 'angular';
 import ngRoute from 'angular-route';
 
+import EAToMysqlCtrl from 'components/EAToMysql/controllers/EAToMysqlCtrl';
+import staticService from 'components/EAToMysql/services/staticService';
+import jsonDataFactory from 'components/EAToMysql/services/jsonDataFactory';
+import objectMapperFactory from 'components/EAToMysql/services/objectMapperFactory';
+import uploadService from 'components/EAToMysql/services/uploadService';
+import view from 'components/EAToMySql/views/EAToMysql.html!text';
+import fileSelect from 'components/EAToMySql/directives/fileSelect';
+import attrMapper from 'components/EAToMySql/directives/attrMapper';
+import mapper from 'components/EAToMySql/directives/mapper';
+import execute from 'components/EAToMySql/directives/execute';
 
-
-import EAToMysqlCtrl from 'components/EAToMysql/EAToMysqlCtrl';
-import staticService from 'components/EAToMysql/js/staticService'
-import view from 'components/EAToMySql/view/EAToMysql.html!text';
 const ROOT_PATH = '/EAToMysql';
 
 let moduleName = angular
     .module("EAToMySql", ['ngRoute'])
-    .controller("EAToMysqlCtrl", EAToMysqlCtrl)
     .service("staticService", ['$http', '$q', staticService])
+    .controller("EAToMysqlCtrl", EAToMysqlCtrl)
+    .factory("jsonDataFactory", ['$rootScope',jsonDataFactory])
+    .factory("objectMapperFactory", ['staticService','$rootScope', objectMapperFactory])
+    .service("uploadService",['$http','$q', 'jsonDataFactory', uploadService])
+    .directive("fileSelect",['uploadService','jsonDataFactory', fileSelect])
+    .directive("mapper",['staticService','jsonDataFactory', 'objectMapperFactory', mapper])
+    .directive("attrMapper",['staticService','jsonDataFactory','objectMapperFactory', attrMapper])
+    .directive("execute",['staticService','jsonDataFactory','objectMapperFactory', execute])
+
+
     .config(($routeProvider) => {
         $routeProvider.when( ROOT_PATH, {
             template: view,

@@ -1,0 +1,23 @@
+<div class="panel panel-default">
+
+    <div class="panel-body">
+        <form name="tableMappingForm" novalidate>
+        <div class="row" ng-repeat="node in nodes" style="text-align: center">
+            <div class="col-md-4"><p class="btn btn-default" style="width: 100%;">{{node}}</p></div>
+            <div class="col-md-4"><p><hr class="between" style="width: 100%;" /></p></div>
+            <div class="col-md-4">
+                <div ng-show="tables.length > 0">
+                        <select ng-options="table for table in tables" ng-model="table"></select>
+                        <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#attributeMap_{{ node }}" title="Create attribute mappings"> >> </button>
+                    <div class="modal fade" id="attributeMap_{{ node }}" tabindex="-1" role="dialog" aria-labelledby="attributeMapLabel">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <attr-mapper node="node" table="table"></attr-mapper>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--<button type="button" class="btn btn-info" ng-click="reset()">Cancel configuration</button>-->
+        </form>
+    </div>
+</div>

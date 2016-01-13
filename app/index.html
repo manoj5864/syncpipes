@@ -15,71 +15,26 @@
         </style>
     </head>
     <body>
-        <div class="container-fluid">
-            <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-                <div class="container-fluid">
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        <a class="navbar-brand" href="index.html">SyncPipies</a>
-                    </div>
-                    <div class="collapse navbar-collapse">
-                        <ul class="nav navbar-nav navbar-right navbar-top-links">
-                            <li class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                    <i class="fa fa-envelope fa-fw"></i>  <i class="fa fa-caret-down"></i>
-                                </a>
-                                <ul class="dropdown-menu dropdown-messages"></ul>
-                            </li>
-                            <li class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                    <i class="fa fa-tasks fa-fw"></i>  <i class="fa fa-caret-down"></i>
-                                </a>
-                                <ul class="dropdown-menu dropdown-tasks"></ul>
-                            </li>
-                            <li class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                    <i class="fa fa-bell fa-fw"></i>  <i class="fa fa-caret-down"></i>
-                                </a>
-                                <ul class="dropdown-menu dropdown-alerts"></ul>
-                            </li>
-                            <li class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                    <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
-                                </a>
-                                <ul class="dropdown-menu dropdown-user">
-                                    <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a></li>
-                                    <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-
+        <div class="container-fluid" >
             <div class="container-fluid">
                 <div class="row">
-                    <div class="navbar-default sidebar">
-                        <div class="sidebar-nav navbar-collapse">
-                            <ul class="nav">
-                                <li><a ng-href="index.html#/selectAdapter" id="connectionLink" class="nav-active"><i class="fa fa-dashboard fa-fw"></i> Connection</a></li>
-                                <li><a id="configLink" href="#"><i class="fa fa-dashboard fa-fw"></i> Configuration</a></li>
-                                <li><a id="mappingLink" href="#"><i class="fa fa-dashboard fa-fw"></i> Mapping</a></li>
-                                <li><a id="executionLink" href="#"><i class="fa fa-dashboard fa-fw"></i> Execution</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div id="page-wrapper">
+                    <!--<div class="navbar-default sidebar">-->
+                        <!--<div class="sidebar-nav navbar-collapse">-->
+                            <!--<ul class="nav">-->
+                                <!--<li><a ng-href="index.html#/selectAdapter" id="connectionLink" class="nav-active"><i class="fa fa-dashboard fa-fw"></i> Connection</a></li>-->
+                                <!--<li><a id="configLink" href="#"><i class="fa fa-dashboard fa-fw"></i> Configuration</a></li>-->
+                                <!--<li><a id="mappingLink" href="#"><i class="fa fa-dashboard fa-fw"></i> Mapping</a></li>-->
+                                <!--<li><a id="executionLink" href="#"><i class="fa fa-dashboard fa-fw"></i> Execution</a></li>-->
+                            <!--</ul>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">
                         <div class="row">
                             <div ng-view=""></div>
                         </div>
                     </div>
+                    <div class="col-md-2"></div>
                 </div>
             </div>
         </div>
