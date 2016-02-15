@@ -34,11 +34,7 @@ let excelService = function($q, dataFactory) {
                 var workbook = XLS.read(data, {type: 'binary'});
                 var excelSheets = workbook.SheetNames;
                 dataFactory.setExcelSheets(excelSheets);
-                var excelAsJson = [];
-                excelSheets.forEach(function (y) {
-                    excelAsJson.push(service.toJson(workbook));
-                });
-                console.log(excelAsJson);
+                var excelAsJson = service.toJson(workbook);
                 dataFactory.setExcelJson(excelAsJson);
                 deferred.resolve();
             }, function (msg) {
@@ -58,46 +54,49 @@ let excelService = function($q, dataFactory) {
     };
 
     service.getColumnsInExcelSheet = function(sheet, excelAsJson) {
-        for(var i=0; i<excelAsJson.length; i++){
-            var jo = excelAsJson[i];
-            if(Object.keys(jo)[0] === sheet)
-                for(var j=0; j< jo[sheet].length; j++)
-                    return Object.keys(jo[sheet][j]);
-        }
+        var keys = Object.keys(excelAsJson);
+        for(var i=0; i<keys.length; i++)
+            if(keys[i] === sheet)
+                return Object.keys(excelAsJson[keys[i]][0]);
         return [];
     };
 
-    service.getObjectMapper = function() {
+    service.getObjectMapper = function(dataFactory) {
         var excelSheets = dataFactory.getExcelSheets();
         var tables = dataFactory.getTables();
-        var tableColMap = dataFactory.getTableColumnMap();
-
+        console.log(dataFactory.getObjectMapper());
         for(var i=0; i<excelSheets.length; i++) {
             var sheet = excelSheets[i];
             var hasMatchingTable = false;
 
-            for(var j=0; i<tables.length; i++) {
+            for(var j=0; j<tables.length; j++) {
                 var table = tables[j];
-                if (sheet == table) {
+                if (sheet.toUpperCase() === table.toUpperCase()) {
                     hasMatchingTable = true;
                     var map = {};
                     map.from = sheet;
                     map.to = table;
                     var columnsOfExcel = service.getColumnsInExcelSheet(sheet, dataFactory.getExcelJson());
-                    var columnsOfTable = getColumnsOfTable(table, tableColMap);
-                    if(map != null) {
-                        map.attributes = [];
-                        for (var coe in columnsOfExcel) {
-                            var aMap = {};
-                            aMap.from = coe;
-                            for (var cot in columnsOfTable) {
-                                if (cot === coe) {
-                                    aMap.to = cot;
+                    var columnsOfTable = dataFactory.getColumnsOfTable(table);
+
+                    map.attributes = [];
+                    for (var coe in columnsOfExcel) {
+                        var aMap = {};
+                        var value = columnsOfExcel[coe];
+                        aMap.from = value;
+                        if(columnsOfTable != null) {
+                            for (var k=0; k<columnsOfTable.length; k++) {
+                                var cot = columnsOfTable[k];
+                                if (cot.Field.toUpperCase() === value.toUpperCase()) {
+                                    aMap.to = cot.Field;
                                     break;
                                 }
                             }
-                            map.attributes.push(aMap);
                         }
+                        map.attributes.push(aMap);
+                    }
+
+                    if(!hasObject(table, sheet)) {
                         dataFactory.pushToObjectMapper(map);
                     }
                 }
@@ -109,24 +108,29 @@ let excelService = function($q, dataFactory) {
                 var columns = service.getColumnsInExcelSheet(sheet, dataFactory.getExcelJson());
 
                 map.attributes = [];
-                for(var i=0; i<columns.length; i++) {
+                for(var j=0; j<columns.length; j++) {
                     var aMap = {};
-                    aMap.from = columns[i]; aMap.to = columns[i];
+                    aMap.from = columns[j]; aMap.to = columns[j];
                     map.attributes.push(aMap);
                 }
-                dataFactory.pushToObjectMapper(map);
+
+                if(!hasObject(sheet,sheet)) {
+                    dataFactory.pushToObjectMapper(map);
+                }
             }
         }
     };
 
-    var getColumnsOfTable = function(table, map) {
-        for(table in map) {
-            if(map.hasOwnProperty(table)) {
-                return map[table];
+    var hasObject = function(to, from) {
+        for(var i=0; i< dataFactory.getObjectMapper().length; i++) {
+            var obj = dataFactory.getObjectMapper()[i];
+            if(obj.from.toUpperCase() === from.toUpperCase() && obj.to.toUpperCase() === to.toUpperCase()) {
+                return true;
+            } else {
+                return false;
             }
         }
-        return null;
-    };
+    }
 };
 
 

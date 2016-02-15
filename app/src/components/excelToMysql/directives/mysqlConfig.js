@@ -48,7 +48,11 @@ let mysqlConfig = function (mysqlService, dataFactory, $rootScope){
                         options.databaseName = scope.database;
                         var promise = mysqlService.queryMysql(fixedUrl.getTables, options);
                         promise.then(
-                            function(payload) { dataFactory.setTables(payload); },
+                            function(payload) {
+                                dataFactory.setTables(payload);
+                                for(var j=0; j<payload.length; j++)
+                                    getColumns(scope.database, payload[j]);
+                            },
                             function(errorPayload) { alert("Unable to get tables!"); console.log(errorPayload); }
                         );
                     }
@@ -59,6 +63,18 @@ let mysqlConfig = function (mysqlService, dataFactory, $rootScope){
         scope.createMapping =function() {
             dataFactory.setDatabase(scope.database);
             dataFactory.setActiveTab("mapper");
+        };
+
+        var getColumns = function(databaseName, tableName) {
+            if (tableName !== undefined && databaseName !== undefined) {
+                var options = {};
+                options.databaseName = databaseName;
+                options.tableName = tableName;
+                mysqlService.queryMysql(fixedUrl.getColumns, options).then(function(payload) {
+                    dataFactory.updateTableColumnMap(tableName, payload); //Field, Type, Null, Key, Default, Extra
+                    return payload;
+                }, function(errorPayload) { alert("Unable to get columns of a table from database!");});
+            }
         };
     };
     return {

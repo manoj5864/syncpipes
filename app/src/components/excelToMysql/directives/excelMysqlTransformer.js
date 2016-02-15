@@ -17,6 +17,7 @@ let excelMysqlTransformer = function(mysqlService, dataFactory){
                     var cols = [];
                     for(var j=0; j<map.attributes.length; j++)
                         cols.push(map.attributes[j].to);
+
                     createTable(dataFactory.getDatabase(), map.to, cols);
                 } else {
                     //logic to update table and columns if table exist goes here
@@ -27,17 +28,17 @@ let excelMysqlTransformer = function(mysqlService, dataFactory){
 
             //insert row
             var excelAsJson = dataFactory.getExcelJson();
-            for(var i=0; i<excelAsJson.length; i++) {
-                var sheetAsJson = excelAsJson[i];
-                var sheet = Object.keys(sheetAsJson)[0];
-                var map = getMapFromObjectMapper(objectMapper, sheet);
+            var keys = Object.keys(excelAsJson);
+            for(var i=0; i<keys.length; i++) {
+                var key = keys[i];
+                var sheetAsJson = excelAsJson[key];
 
+                var map = getMapFromObjectMapper(objectMapper, key);
                 var tableName = map.to;
-                var rowsAsJson = sheetAsJson[sheet];
 
-                for(var j=0; j<rowsAsJson.length; j++) {
+                for(var j=0; j<sheetAsJson.length; j++) {
                     var attributes = {};
-                    var rowAsJson = rowsAsJson[j];
+                    var rowAsJson = sheetAsJson[j];
                     for(var k=0; k<map.attributes.length; k++) {
                         var aMap = map.attributes[k];
                         attributes[aMap.to] = rowAsJson[aMap.from];

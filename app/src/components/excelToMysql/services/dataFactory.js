@@ -6,7 +6,7 @@ let  dataFactory = function ($rootScope) {
     data.database = null;
     data.excelJson = null;
     data.excelSheets = [];
-    data.objectMapper = [];
+    data.objectMapper = excelObjectMapper;
     data.tableColumnMap = {};
     data.activeTab = "config";
 
@@ -32,9 +32,11 @@ let  dataFactory = function ($rootScope) {
         },
         setObjectMapper: function(d) {
           data.objectMapper = d;
+            $rootScope.$broadcast('objectMapperUpdated');
         },
         pushToObjectMapper: function(d) {
             data.objectMapper.push(d);
+            $rootScope.$broadcast('objectMapperUpdated');
         },
         getObjectMapper: function () {
             return data.objectMapper;
@@ -59,10 +61,14 @@ let  dataFactory = function ($rootScope) {
             return data.tables;
         },
         updateTableColumnMap: function(key, value) {
-          data.tableColumnMap[key] = value;
+            data.tableColumnMap[key] = value;
+            $rootScope.$broadcast('tableColumnMapUpdated');
         },
         getTableColumnMap: function() {
           return data.tableColumnMap;
+        },
+        getColumnsOfTable: function(table) {
+            return data.tableColumnMap[table];
         },
         isEmpty: function() {
             for(var prop in data)

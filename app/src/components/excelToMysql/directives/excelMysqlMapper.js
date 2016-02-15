@@ -5,14 +5,14 @@ let excelMysqlMapper = function(excelService, mysqlService, dataFactory){
 
     var control = function($scope, excelService, dataFactory) {
         $scope.init = function() {
-            var tables = dataFactory.getTables();
-            for(var i=0; i<tables.length; i++)
-                getColumns(dataFactory.getDatabase(), tables[i]);
-
-            $scope.tables = dataFactory.getTables();
+			$scope.tables = dataFactory.getTables();
             $scope.excelSheets = dataFactory.getExcelSheets();
-            $scope.objectMapper = excelService.getObjectMapper();
-        }
+            excelService.getObjectMapper(dataFactory);
+        };
+
+        $scope.$on('objectMapperUpdated', function() {
+            $scope.objectMapper = dataFactory.getObjectMapper();
+        });
     }
 
     var linker = function (scope, element, attrs) {
@@ -27,56 +27,24 @@ let excelMysqlMapper = function(excelService, mysqlService, dataFactory){
             dataFactory.setActiveTab("mapper");
         };
 
-        scope.updateObjectMapper = function(sheet, table) {
-            var objectMapper = dataFactory.getObjectMapper();
-            for(var i=0; i<objectMapper.length; i++) {
-                if(objectMapper[i].from === sheet) {
-                    objectMapper[i].to = table;
-                    for(var j=0; j<objectMapper[i].attributes.length; j++)
-                        objectMapper[i].attributes[j].to = null;
-                    // add more logic to update the map automatically here..
-                }
-            }
-            dataFactory.setObjectMapper(objectMapper);
-        };
-
         scope.getExcelColumn = function(sheet) {
             return excelService.getColumnsInExcelSheet(sheet, dataFactory.getExcelJson());
         };
 
         scope.getTableColumnMap = function(table) {
-            return dataFactory.getTableColumnMap()[table];
-        };
-
-        scope.updateAttributeMapper = function(sheet, excelColumn, tableColumn) {
-            var objectMapper = dataFactory.getObjectMapper();
-            for(var i=0; i<objectMapper.length; i++) {
-                if(objectMapper[i].from === sheet) {
-                    for(var j=0; j<objectMapper[i].attributes.length; j++) {
-                        if(objectMapper[i].attributes[j].from === excelColumn)
-                            objectMapper[i].attributes[j].to = tableColumn;
-                    }
-                    // add more logic to update the map automatically here..
+            var cols= [];
+            var temp = dataFactory.getTableColumnMap()[table];
+            if(temp !== undefined) {
+                for(var i=0; i<temp.length; i++) {
+                    cols.push(temp[i].Field);
                 }
             }
-            dataFactory.setObjectMapper(objectMapper);
+            return cols;
         };
 
         scope.executeModel = function() {
             dataFactory.setActiveTab("execution");
         };
-    };
-
-    var getColumns = function(databaseName, tableName) {
-        if (tableName !== undefined && databaseName !== undefined) {
-            var options = {};
-            options.databaseName = databaseName;
-            options.tableName = tableName;
-            mysqlService.queryMysql(fixedUrl.getColumns, options).then(function(payload) {
-                dataFactory.updateTableColumnMap(tableName, payload); //Field, Type, Null, Key, Default, Extra
-                return payload;
-            }, function(errorPayload) { alert("Unable to get columns of a table from database!");});
-        }
     };
 
     return {
@@ -98,11 +66,10 @@ let excelMysqlMapper = function(excelService, mysqlService, dataFactory){
             createMapping: "=",
             excelSheets: "=",
             tables: "=",
-            updateObjectMapper: "=",
-            updateAttributeMapper: "=",
             getExcelColumn: "=",
             init: "=",
-            getTableColumnMap: "="
+            getTableColumnMap: "=",
+            objectMapper: "="
         },
         controller: control,
         template: template

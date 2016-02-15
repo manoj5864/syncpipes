@@ -1,6 +1,6 @@
 import angular from 'angular';
 import ngRoute from 'angular-route';
-
+import "components/excelToMysql/services/excelObjectMapper";
 import excelToMysqlCtrl from 'components/excelToMysql/controllers/excelToMysqlCtrl';
 import excelService from 'components/excelToMysql/services/excelService';
 import mysqlService from 'components/excelToMysql/services/mysqlService';

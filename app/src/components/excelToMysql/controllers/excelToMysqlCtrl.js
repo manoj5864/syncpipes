@@ -1,7 +1,3 @@
-import angular from 'angular';
-import "js-xlsx"
-import "js-xlsx/dist/cpexcel"
-
 function excelToMysqlCtrl($scope, dataFactory) {
     "use strict";
 
