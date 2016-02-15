@@ -56,6 +56,23 @@ let mysqlConfig = function (mysqlService, dataFactory, $rootScope){
             }
         });
 
+        scope.$watch('database', function() {
+            if(scope.databases != null) {
+                for (var i = 0; i < scope.databases.length; i++) {
+                    var db = scope.databases[i];
+                    if (db.Database === scope.database) {
+                        var options = {};
+                        options.databaseName = scope.database;
+                        var promise = mysqlService.queryMysql(fixedUrl.getTables, options);
+                        promise.then(
+                            function(payload) { dataFactory.setTables(payload); },
+                            function(errorPayload) { alert("Unable to get tables!"); console.log(errorPayload); }
+                        );
+                    }
+                }
+            }
+        });
+
         scope.createMapping =function() {
             dataFactory.setDatabase(scope.database);
             dataFactory.setActiveTab("mapper");

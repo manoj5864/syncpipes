@@ -8,8 +8,8 @@ let excelMysqlMapper = function(excelService, mysqlService, dataFactory){
             var tables = dataFactory.getTables();
             for(var i=0; i<tables.length; i++)
                 getColumns(dataFactory.getDatabase(), tables[i]);
-
-            $scope.tables = dataFactory.getTables();
+            
+			$scope.tables = dataFactory.getTables();
             $scope.excelSheets = dataFactory.getExcelSheets();
             $scope.objectMapper = excelService.getObjectMapper();
         }
