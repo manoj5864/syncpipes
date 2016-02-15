@@ -22,15 +22,11 @@
         </uib-tab>
 
         <uib-tab heading="Mapping" id="mapper" active="activeTab == 'mapper'">
-            <excel-mysql-mapper></excel-mysql-mapper>
+            <excel-mysql-mapper ng-if="activeTab == 'mapper'"></excel-mysql-mapper>
         </uib-tab>
 
-        <uib-tab heading="Execution" id="execution">
-            <div class="row">
-                <div class="col-md-12"><h3>Execution status</h3></div>
-                <hr /><br /><br />
-                <div class="log" style="padding-left: 15%"></div>
-            </div>
+        <uib-tab heading="Execution" id="execution" active="activeTab == 'execution'">
+            <excel-mysql-transformer ng-if="activeTab == 'execution'"></excel-mysql-transformer>
         </uib-tab>
     </uib-tabset>
 </div>

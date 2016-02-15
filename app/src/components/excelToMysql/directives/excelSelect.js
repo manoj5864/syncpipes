@@ -1,6 +1,6 @@
 import template from "components/excelToMysql/views/excelUpload.html!text";
 
-let excelSelect = function(excelUploadService, excelDataFactory){
+let excelSelect = function(excelService, dataFactory){
     "use strict";
 
     var linker = function (scope, element, attrs) {
@@ -8,7 +8,7 @@ let excelSelect = function(excelUploadService, excelDataFactory){
         scope.message = "Upload an excel file";
         bindListener();
         scope.$on('sourceBroadcast', function() {
-            if (!excelDataFactory.isEmpty()) {
+            if (!dataFactory.isExcelDataEmpty()) {
                 scope.status = 'success';
                 scope.message = "Excel file successfully uploaded";
             }
@@ -20,13 +20,13 @@ let excelSelect = function(excelUploadService, excelDataFactory){
         });
 
         scope.reset = function(){
-            excelDataFactory.clear();
+            dataFactory.clearExcelJson();
         };
 
         function bindListener(){
             element.bind('change', function (event) {
                 var files = event.target.files;
-                var promise = excelUploadService.upload(files[0]);
+                var promise = excelService.upload(files[0]);
                 scope.status = 'loading';
                 scope.message = "The file is being processed";
                 promise.then(
@@ -57,5 +57,5 @@ let excelSelect = function(excelUploadService, excelDataFactory){
     };
 };
 
-excelSelect.$inject = ['excelUploadService', 'excelDataFactory'];
+excelSelect.$inject = ['excelService', 'dataFactory'];
 export default excelSelect;
