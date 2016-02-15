@@ -35,32 +35,6 @@ let uploadService = function($http, $q, jsonDataFactory) {
 
 };
 
-        //$http.post(url, fd, {
-        //    headers: { 'Content-Type': undefined },
-        //    transformRequest: angular.identity
-        //}).success(function (data) {
-        //    $http.get(url+"?fileName="+data, {})
-        //        .success(function (data) {
-        //            jsonDataFactory.setData(JSON.parse(data));
-        //            service.status.success = true;
-        //        })
-        //        .error(function (error) {
-        //            jsonDataFactory.clear();
-        //            service.status.success = false;
-        //            service.status.msg = error;
-        //        });
-        //})
-        //.error(function (error) {
-        //    jsonDataFactory.clear();
-        //    service.status.success = false;
-        //    service.status.msg = error;
-        //})
-        //.catch(function(error){
-        //    jsonDataFactory.clear();
-        //    service.status.success = false;
-        //    service.status.msg = error;
-        //});
-
 uploadService.$inject = [
     '$http',
     '$q',

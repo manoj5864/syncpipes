@@ -1,0 +1,63 @@
+<p>Configuration to connect to your MySql</p>
+<div class="form-group">
+    <label for="baseUrl">Base Url</label>
+    <input type="text" class="form-control" id="baseUrl" placeholder="localhost" ng-model="baseUrl" />
+</div>
+<div class="form-group">
+    <label for="port">Port</label>
+    <input type="text" class="form-control" id="port" placeholder="3306" ng-model="port" />
+</div>
+<div class="form-group">
+    <label for="userName">User Name</label>
+    <input type="text" class="form-control" id="userName" placeholder="mustermann" ng-model="userName" />
+</div>
+<div class="form-group">
+    <label for="password">Password</label>
+    <input type="password" class="form-control" id="password" placeholder="Password" ng-model="password" />
+</div>
+<button type="button" class="btn btn-primary" ng-click="connectToMysql()">Connect</button>
+<p> {{ message }} </p>
+<br/><br/>
+
+<div class="panel panel-default" ng-show="databases.length > 0">
+    <div class="panel-body">
+        <div class="form-group">
+            <label for="selectDb">Select a database</label>
+            <select id="selectDb" ng-model="database">
+                <option ng-repeat="option in databases" value="{{option.Database}}">
+                    {{option.Database}}
+                </option>
+            </select>
+        </div>
+
+        <div>
+            <p>-- OR --</p>
+        </div>
+
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createDB">Create a new database</button>
+
+        <div class="modal fade" id="createDB" tabindex="-1" role="dialog" aria-labelledby="createDBLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Create a new database</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="dbName">Database Name</label>
+                            <input id="dbName" type="text" class="form-control" placeholder="TestDB" ng-model="databaseName" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" ng-click="createDb()" data-dismiss="modal">Create</button>
+                    </div>
+                    <br /><br />
+                </div>
+            </div>
+        </div>
+
+        <button ng-show="database != null" type="button" class="btn btn-primary" ng-click="createMapping()" >Create necessary mappings</button>
+    </div>
+</div>

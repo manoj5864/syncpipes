@@ -1,11 +1,19 @@
-var excelToMysqlService = function($http, $q) {
+var excelService = function($q) {
     var service = {};
-    var POST = "POST";
+
+    var excelFile = null;
+
+    service.setExcelFile = function(file) {
+        excelFile = file;
+    };
+
+    service.getExcelFile = function() {
+        return excelFile;
+    };
 
     service.readExcelFile = function(file) {
         var deferred = $q.defer();
         var reader = new FileReader();
-        var name = self.excelFile.name;
         reader.onload = function(e) {
             deferred.resolve(e.target.result);
         };
@@ -25,29 +33,10 @@ var excelToMysqlService = function($http, $q) {
     service.getColumnsInExcelSheet = function(sheet, excelAsJson) {
         for(var i=0; i<excelAsJson.length; i++){
             var jo = excelAsJson[i];
-            if(Object.keys(jo)[0] === sheet) {
-                for(var j=0; j< jo[sheet].length; j++){
+            if(Object.keys(jo)[0] === sheet)
+                for(var j=0; j< jo[sheet].length; j++)
                     return Object.keys(jo[sheet][j]);
-                }
-            }
         }
-    };
-
-    service.queryMysql = function(url, options) {
-        var deferred = $q.defer();
-        $http({
-            url: url,
-            method: POST,
-            async: false,
-            data: options,
-            dataType: "json",
-            contentType: "application/json",
-        }).then(function(res) {
-            deferred.resolve(res.data);
-        }, function(msg) {
-            deferred.reject(msg);
-        });
-        return deferred.promise;
     };
 
     return service;
