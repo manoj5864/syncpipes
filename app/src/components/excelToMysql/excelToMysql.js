@@ -11,6 +11,7 @@ import mysqlDataFactory from 'components/excelToMysql/services/mysqlDataFactory'
 import excelSelect from 'components/excelToMysql/directives/excelSelect';
 import mysqlConfig from 'components/excelToMysql/directives/mysqlConfig';
 import excelMysqlMapper from 'components/excelToMysql/directives/excelMysqlMapper';
+import excelMysqlTransformer from 'components/excelToMysql/directives/excelMysqlTransformer';
 import view from 'components/excelToMySql/views/excelToMysql.html!text';
 const ROOT_PATH = '/excelToMysql';
 
@@ -24,8 +25,9 @@ let moduleName = angular
     .factory("mysqlDataFactory", ['$rootScope', mysqlDataFactory])
     .service("excelUploadService", ['$q', 'excelService', 'excelDataFactory', excelUploadService])
     .directive("excelSelect", ['excelUploadService', 'excelDataFactory', excelSelect])
-    .directive("mysqlConfig", ['mysqlService', 'mysqlDataFactory', 'dataFactory', mysqlConfig])
-    .directive("excelMysqlMapper", ['mysqlService', 'mysqlDataFactory', 'dataFactory', excelMysqlMapper])
+    .directive("mysqlConfig", ['mysqlService', 'mysqlDataFactory', 'dataFactory', '$rootScope', mysqlConfig])
+    .directive("excelMysqlMapper", ["excelService", 'mysqlService', 'excelDataFactory', 'dataFactory', excelMysqlMapper])
+    .directive("excelMysqlTransformer", ["mysqlService", 'excelDataFactory', 'dataFactory', excelMysqlTransformer])
     .config(($routeProvider) => {
         $routeProvider.when( ROOT_PATH, {
             template: view,

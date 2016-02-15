@@ -1,7 +1,7 @@
 import "js-xlsx"
 import "js-xlsx/dist/cpexcel"
 
-let excelUploadService = function($q, mysqlService, excelDataFactory) {
+let excelUploadService = function($q, excelService, excelDataFactory) {
     "use strict";
     var service = this;
     var deferred = $q.defer();
@@ -9,13 +9,14 @@ let excelUploadService = function($q, mysqlService, excelDataFactory) {
         if(file.name.split('.').pop() !== 'xlsx') {
             deferred.reject({"message": "Illegal file format"});
         } else {
-            mysqlService.readExcelFile(file).then(function (data) {
+            excelService.readExcelFile(file).then(function (data) {
                 if (typeof require !== 'undefined') XLS = require('xlsjs');
                 var workbook = XLS.read(data, {type: 'binary'});
                 var excelSheets = workbook.SheetNames;
+                excelDataFactory.setExcelSheets(excelSheets);
                 var excelAsJson = [];
                 excelSheets.forEach(function (y) {
-                    excelAsJson.push(mysqlService.toJson(workbook));
+                    excelAsJson.push(excelService.toJson(workbook));
                 });
                 excelDataFactory.setData(excelAsJson);
                 deferred.resolve();

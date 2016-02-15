@@ -1,28 +1,34 @@
 
 let  excelDataFactory = function ($rootScope) {
     "use strict";
-    var JSONSchema = null;
+    var excelJson = null;
+    var excelSheets = [];
     return {
         getData: function() {
-            return JSONSchema;
+            return excelJson;
         },
         setData: function(data) {
-            JSONSchema = data;
+            excelJson = data;
             $rootScope.$broadcast('sourceBroadcast');
         },
+        setExcelSheets: function(es) {
+            excelSheets = es;
+        },
+        getExcelSheets: function() {
+          return excelSheets;
+        },
         isEmpty: function() {
-            for(var prop in JSONSchema) {
-                if(JSONSchema.hasOwnProperty(prop))
+            for(var prop in excelJson) {
+                if(excelJson.hasOwnProperty(prop))
                     return false;
             }
             return true;
         },
         clear: function() {
-            JSONSchema = null;
+            excelJson = null;
             $rootScope.$broadcast('sourceBroadcast');
         }
     };
-
 };
 excelDataFactory.$inject = ['$rootScope'];
 export default excelDataFactory;
