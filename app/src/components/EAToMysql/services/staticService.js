@@ -5,7 +5,7 @@ function staticService ($http, $q) {
     var service = this;
 
     const MYSQL = {
-        dbName: "amelie_sdb",
+        dbName: "amelie_dataingest",
         mysqlConnectionServer: "http://localhost:8084/connectToMysql",
         mysqlCreateDB : "http://localhost:8084/createADatabase",
         getTables : "http://localhost:8084/getTables",

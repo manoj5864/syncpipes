@@ -1,7 +1,8 @@
 var excelObjectMapper = [{
-    from: "Product", to: "product",
-    attributes: [{ from: "id", to: "id" },
-        { from: "Name", to: "Name"},
-        { from: "Description", to: "Description"}]
+    from: "Requirement", to: "requirement",
+    attributes: [{ from: "ID", to: "id" },
+        { from: "Name", to: "name"},
+        { from: "Info", to: "info"},
+        { from: "Description", to: "description"}]
     }
 ];

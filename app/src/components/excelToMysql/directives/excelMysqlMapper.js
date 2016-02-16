@@ -13,7 +13,7 @@ let excelMysqlMapper = function(excelService, mysqlService, dataFactory){
         $scope.$on('objectMapperUpdated', function() {
             $scope.objectMapper = dataFactory.getObjectMapper();
         });
-    }
+    };
 
     var linker = function (scope, element, attrs) {
         scope.status = 'empty';
