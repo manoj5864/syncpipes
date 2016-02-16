@@ -8,6 +8,7 @@ let excelMysqlMapper = function(excelService, mysqlService, dataFactory){
 			$scope.tables = dataFactory.getTables();
             $scope.excelSheets = dataFactory.getExcelSheets();
             excelService.getObjectMapper(dataFactory);
+            $scope.objectMapper = dataFactory.getObjectMapper();
         };
 
         $scope.$on('objectMapperUpdated', function() {
