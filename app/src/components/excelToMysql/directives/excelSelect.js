@@ -1,14 +1,15 @@
 import template from "components/excelToMysql/views/excelUpload.html!text";
 
-let excelSelect = function(excelService, dataFactory){
+let excelSelect = function(excelService, dataFactories){
     "use strict";
 
     var linker = function (scope, element, attrs) {
         scope.status = 'empty';
         scope.message = "Upload an excel file";
+
         bindListener();
         scope.$on('sourceBroadcast', function() {
-            if (!dataFactory.isExcelDataEmpty()) {
+            if (!dataFactories.getDataFactory(scope.dataFactoryName).isExcelDataEmpty()) {
                 scope.status = 'success';
                 scope.message = "Excel file successfully uploaded";
             }
@@ -20,13 +21,13 @@ let excelSelect = function(excelService, dataFactory){
         });
 
         scope.reset = function(){
-            dataFactory.clearExcelJson();
+            dataFactories.getDataFactory(scope.dataFactoryName).clearExcelJson();
         };
 
         function bindListener(){
             element.bind('change', function (event) {
                 var files = event.target.files;
-                var promise = excelService.upload(files[0]);
+                var promise = excelService.upload(files[0], dataFactories.getDataFactory(scope.dataFactoryName));
                 scope.status = 'loading';
                 scope.message = "The file is being processed";
                 promise.then(
@@ -35,7 +36,7 @@ let excelSelect = function(excelService, dataFactory){
                         element.find("input").each(function (i, input) {
                             input.value = ""
                         });
-                        scope.message = "Excel file was successfully extracted!"
+                        scope.message = "Excel file was successfully extracted!";
                     },
                     function (errorPayload) {
                         scope.status = 'fail';
@@ -43,19 +44,17 @@ let excelSelect = function(excelService, dataFactory){
                     }
                 );
             });
-        }
+        };
     };
     return {
         restrict: 'E',
         link: linker,
         scope: {
-            status: "=",
-            message: "=",
-            reset: "="
+            dataFactoryName: "="
         },
         template: template
     };
 };
 
-excelSelect.$inject = ['excelService', 'dataFactory'];
+excelSelect.$inject = ['excelService', 'dataFactories'];
 export default excelSelect;

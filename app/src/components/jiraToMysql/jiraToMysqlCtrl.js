@@ -113,7 +113,7 @@ function jiraToMysqlCtrl($q, $scope, $location, jiraToMysqlService) {
 
         self.jiraOptions.jiraUrl = "http://localhost:8085";
         self.jiraOptions.userName = "manoj5864";
-        self.jiraOptions.jiraPassword = "manoj5864";
+        self.jiraOptions.jiraPassword = "@Jira5864";
 
         jiraOptions.method = "GET";
         jiraOptions.baseUrl = self.jiraOptions.jiraUrl;
