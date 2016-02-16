@@ -14,6 +14,10 @@ var sleep = function(milliseconds) {
     }
 };
 
+var isEmpty = function(str) {
+    return (!str || 0 === str.length);
+}
+
 var fixedUrl = {
     mysqlConnectionServer: "http://localhost:8084/connectToMysql",
     mysqlCreateDB: "http://localhost:8084/createADatabase",

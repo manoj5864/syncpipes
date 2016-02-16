@@ -1,7 +1,7 @@
 import "js-xlsx"
 import "js-xlsx/dist/cpexcel"
 
-let excelService = function($q, dataFactory) {
+let excelService = function($q) {
     "use strict";
     var service = this;
     var excelFile = null;
@@ -24,7 +24,7 @@ let excelService = function($q, dataFactory) {
         return deferred.promise;
     };
 
-    service.upload = function (file) {
+    service.upload = function (file, dataFactory) {
         var deferred = $q.defer();
         if(file.name.split('.').pop() !== 'xlsx') {
             deferred.reject({"message": "Illegal file format"});
@@ -96,7 +96,7 @@ let excelService = function($q, dataFactory) {
                         map.attributes.push(aMap);
                     }
 
-                    if(!hasObject(table, sheet)) {
+                    if(!hasObject(table, sheet, dataFactory.getObjectMapper())) {
                         dataFactory.pushToObjectMapper(map);
                     }
                 }
@@ -114,26 +114,21 @@ let excelService = function($q, dataFactory) {
                     map.attributes.push(aMap);
                 }
 
-                if(!hasObject(sheet,sheet)) {
+                if(!hasObject(sheet,sheet, dataFactory.getObjectMapper())) {
                     dataFactory.pushToObjectMapper(map);
                 }
             }
         }
     };
 
-    var hasObject = function(to, from) {
-        for(var i=0; i< dataFactory.getObjectMapper().length; i++) {
-            var obj = dataFactory.getObjectMapper()[i];
-            if(obj.from.toUpperCase() === from.toUpperCase() && obj.to.toUpperCase() === to.toUpperCase()) {
-                return true;
-            } else {
-                return false;
-            }
+    var hasObject = function(to, from, objectMapper) {
+        for(var i=0; i< objectMapper.length; i++) {
+            var obj = objectMapper[i];
+            if(obj.from.toUpperCase() === from.toUpperCase() && obj.to.toUpperCase() === to.toUpperCase()) return true;
         }
+        return false;
     }
 };
 
-
-excelService.$inject = ['$q', 'dataFactory'];
-
+excelService.$inject = ['$q'];
 export default excelService;

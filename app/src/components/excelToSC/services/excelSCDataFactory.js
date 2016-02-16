@@ -1,10 +1,10 @@
-let  dataFactory = function ($rootScope) {
+let  excelSCDataFactory = function ($rootScope) {
     "use strict";
     var data = {};
-
-    data.name = "excelToMysql";
-    data.tables = null;
-    data.database = null;
+    data.auth = {user: "manoj5864@gmail.com", password: "@Sociocortex"};
+    data.name = "excelToSC";
+    data.types = null;
+    data.workspaces = null;
     data.excelJson = null;
     data.excelSheets = [];
     data.objectMapper = excelObjectMapper;
@@ -20,7 +20,10 @@ let  dataFactory = function ($rootScope) {
             $rootScope.$broadcast('dataBroadcast');
         },
         getName: function() {
-          return data.name;
+            return data.name;
+        },
+        getAuth: function() {
+            return data.auth;
         },
         getExcelJson: function() {
             return data.excelJson;
@@ -53,17 +56,17 @@ let  dataFactory = function ($rootScope) {
         getActiveTab: function(){
             return data.activeTab;
         },
-        setDatabase: function(database) {
-          data.database = database;
+        setWorkspace: function(workspace) {
+          data.workspace = workspace;
         },
-        getDatabase: function() {
-          return data.database;
+        getWorkspace: function() {
+          return data.workspace;
         },
-        setTables: function(t) {
-            data.tables = t;
+        setTypes: function(types) {
+            data.types = types;
         },
-        getTables: function() {
-            return data.tables;
+        getTypes: function() {
+            return data.types;
         },
         updateTableColumnMap: function(key, value) {
             data.tableColumnMap[key] = value;
@@ -96,5 +99,5 @@ let  dataFactory = function ($rootScope) {
     };
 
 };
-dataFactory.$inject = ['$rootScope'];
-export default dataFactory;
+excelSCDataFactory.$inject = ['$rootScope'];
+export default excelSCDataFactory;
