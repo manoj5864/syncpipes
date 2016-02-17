@@ -6,23 +6,40 @@ let  objectMapperFactory = function (staticService, $rootScope) {
             return objectMapper;
         },
         createObjectMapper: function(jsonData){
-            var nodes = staticService.getNodes(jsonData);
-            for (var iNode=0; iNode<nodes.length; iNode++){
-                var map={};
-                map.from = nodes[iNode];
-                map.to = null;
-                var attributes = staticService.getAttributesOfNode(jsonData, nodes[iNode]);
-                map.attributes=[];
-                for (var iAttribute=0; iAttribute < attributes.length; iAttribute++){
-                    var temp = {};
-                    temp.from = attributes[iAttribute];
-                    temp.to = null;
-                    map.attributes.push(temp);
-                }
-                objectMapper.push(map);
-            }
+            //var nodes = staticService.getNodes(jsonData);
+            //for (var iNode=0; iNode<nodes.length; iNode++){
+            //    var map={};
+            //    map.from = nodes[iNode];
+            //    map.to = null;
+            //    var attributes = staticService.getAttributesOfNode(jsonData, nodes[iNode]);
+            //    map.attributes=[];
+            //    for (var iAttribute=0; iAttribute < attributes.length; iAttribute++){
+            //        var temp = {};
+            //        temp.from = attributes[iAttribute];
+            //        temp.to = null;
+            //        map.attributes.push(temp);
+            //    }
+            //    objectMapper.push(map);
+            //}
+            objectMapper = staticService.getFakeMapperObject();
             $rootScope.$broadcast('mapperBroadcast');
         },
+        getAttributes: function(node,attribute){
+            for(var i=0; i<objectMapper.length; i++) {
+                if(objectMapper[i].from === node) {
+                    return objectMapper[i].attributes
+                }
+            }
+        },
+
+        getTable: function(node){
+            for(var i=0; i<objectMapper.length; i++) {
+                if(objectMapper[i].from === node) {
+                    return objectMapper[i].to;
+                }
+            }
+        },
+
         updateNodes: function(node, table){
             for(var i=0; i<objectMapper.length; i++) {
                 if(objectMapper[i].from === node) {

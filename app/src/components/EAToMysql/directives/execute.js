@@ -3,6 +3,7 @@ import template from "components/EAToMysql/views/execute.html!text"
 export default function execute(staticService, jsonDataFactory, objectMapperFactory){
     "use strict";
     function getMapFromObjectMapper(objectMapper, fromObject) {
+        console.log(objectMapper);
         for(var i=0; i<objectMapper.length; i++)
             if(objectMapper[i].from === fromObject) return objectMapper[i];
     }

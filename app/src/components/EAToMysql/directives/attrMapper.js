@@ -5,26 +5,24 @@ export default function attrMapper(staticService, jsonDataFactory, objectMapperF
     "use strict";
 
     var linker = function (scope, element, attrs) {
-        let node = attrs['node'];
-        let table = attrs['table'];
 
-        scope.nodeAttrs = staticService.getAttributesOfNode(jsonDataFactory.getData(), scope.node);
+        //let node = attrs['node'];
+        //let table = attrs['table'];
+        let node = scope.node;
+        let table = scope.table;
+        let attributeFrom = attrs['attribute'];
+        let attributeTo = attrs['field'];
 
-        scope.$watch(table,function(){
-            if (scope.table != undefined){
-                objectMapperFactory.updateNodes(scope.node,scope.table);
-                staticService.getColumns(scope.table).then(
-                    function (payload) {
-                        return scope.fields=payload;
-                    },
-                    function (error) {
-                        return scope.error=error;
-                    }
-                );
+        staticService.getColumns(table).then(
+            function (payload) {
+                return scope.fields=payload;
+            },
+            function (error) {
+                return scope.error=error;
             }
-        });
+        );
         scope.update = function(node, attribute, column){
-            objectMapperFactory.updateAttributes(node, attribute, column.Field);
+            objectMapperFactory.updateAttributes(node, attribute, field);
         }
     };
     return {
@@ -33,13 +31,10 @@ export default function attrMapper(staticService, jsonDataFactory, objectMapperF
         replace: true,
         link: linker,
         scope: {
-            nodeAttrs: '=',
             node:'=',
             table: '=',
-            fields: '=',
-            error: "=",
-            ngModel: '=',
-            update: "="
+            field: '=',
+            attribute: "="
         },
         template: template
     };
