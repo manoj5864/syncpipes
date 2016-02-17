@@ -1,4 +1,8 @@
 <div ng-controller="jiraToMysqlCtrl as ctrl" ng-cloak ng-init="ctrl.init()" id="jiraToMySql">
+  <ol class="breadcrumb">
+    <li><a ng-href="index.html#/selectAdapter">Select adapter</a></li>
+    <li class="active">EA adapter</li>
+  </ol>
   <div id="config" style="display: block" class="form-group">
     <div class="panel panel-default">
       <div class="panel-heading">Import from Jira</div>
@@ -130,10 +134,11 @@
           </div>
         </div>
 
-        <p style="float: right">
-          <button type="button" class="btn btn-primary" ng-click="ctrl.executeModel()">Start execution</button>
-        </p>
+
       </div>
+      <br/>
+      <button type="button" class="btn btn-primary" ng-click="ctrl.executeModel()">Start execution</button>
+
     </div>
     <hr /><br />
 

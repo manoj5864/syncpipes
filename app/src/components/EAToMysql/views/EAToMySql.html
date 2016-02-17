@@ -6,70 +6,10 @@
     </ol>
     <div class="panel panel-default" id="ea-connect">
         <div class="panel-heading">Import from EA</div>
-        <!--<div class="alert alert-danger" role="alert" ng-show="errorFlagEA">{{ errors }}</div>-->
-        <!--<div class="panel-body" ng-show="(showFileUpload && !showData)">-->
-            <!--<p> Upload your .eap file </p>-->
-            <!--<form enctype="multipart/form-data">-->
-                <!--<input class="btn btn-primary" id="EAFile" type="file" ng-model="EAFile" onchange="angular.element(this).scope().uploadFile(this.files)" multiple/>-->
         <div class="panel-body">
             <file-select></file-select>
         </div>
-
-            <!--</form>-->
-        <!--</div>-->
-        <!--<div class="panel-body" ng-show="(!showFileUpload  && !showData)">-->
-            <!--<div class="alert alert-info" role="alert">-->
-                <!--<div>Loading<i class="ellipsis"><i>.</i><i>.</i><i>.</i></i></div>​-->
-                <!--<p>File was successfully uploaded, but it takes some time for us to extract the data. </p>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--<div class="panel-body" ng-show="(!showFileUpload && showData)">-->
-            <!--<div class="alert alert-info" role="alert">-->
-                <!--<p >Data were successfully extracted. </p>-->
-            <!--</div>-->
-            <!--<button type="button" class="btn btn-primary" ng-click="ctrl.repeatUpload()" >I liked it, I want to try again</button>-->
-        <!--</div>-->
-
     </div>
-
-    <!--<div class="panel panel-default" id="db-connect" style="">-->
-        <!--<div class="panel-heading">Export to MySql</div>-->
-        <!--<div class="alert alert-danger" role="alert" ng-show="errorFlagMysql">{{ errors }}</div>-->
-        <!--<div class="panel-body">-->
-            <!--<p>Configuration to connect to your MySql</p>-->
-            <!--<div class="form-group">-->
-                <!--<label for="baseUrl">Base Url</label>-->
-                <!--<input type="text" class="form-control" id="baseUrl" placeholder="localhost" ng-model="baseUrl" />-->
-            <!--</div>-->
-            <!--<div class="form-group">-->
-                <!--<label for="port">Port</label>-->
-                <!--<input type="text" class="form-control" id="port" placeholder="3306" ng-model="port" />-->
-            <!--</div>-->
-            <!--<div class="form-group">-->
-                <!--<label for="userName">User Name</label>-->
-                <!--<input type="text" class="form-control" id="userName" placeholder="mustermann" ng-model="userName" />-->
-            <!--</div>-->
-            <!--<div class="form-group">-->
-                <!--<label for="password">Password</label>-->
-                <!--<input type="password" class="form-control" id="password" placeholder="Password" ng-model="password" />-->
-            <!--</div>-->
-            <!--<button type="button" class="btn btn-primary" ng-click="ctrl.connectToMysql()">Connect</button>-->
-            <!--<br/><br/>-->
-            <!--<div class="panel panel-default" ng-show="ctrl.databases !== null">-->
-                <!--<div class="panel-body">-->
-                    <!--<div class="form-group">-->
-                        <!--<label for="selectDb">Select a database</label>-->
-                        <!--<select id="selectDb" ng-model="database">-->
-                            <!--<option ng-repeat="option in ctrl.databases" value="{{option.Database}}">-->
-                                <!--{{option.Database}}-->
-                            <!--</option>-->
-                        <!--</select>-->
-                    <!--</div>-->
-                    <!--<button type="button" class="btn btn-primary" ng-click="ctrl.createMapping()" ng-show="database != null">Create necessary mappings</button>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
     <div class="panel panel-default">
         <div class="panel-heading">Mapping configuration</div>
         <div class="panel-body">
@@ -85,59 +25,6 @@
             </div>
         </div>
     </div>
-    <!--<div id="mapper" style="display: none" class="container-fluid">-->
-        <!--<div class="row" style="text-align: center">-->
-            <!--<div class="col-md-4">Entities in the EA</div>-->
-            <!--<div class="col-md-4">Object map</div>-->
-            <!--<div class="col-md-4">-->
-                <!--Tables in MySql-->
-                <!--<p style="float: right"><button type="button" class="btn btn-primary" ng-click="ctrl.executeModel()">Start execution</button></p>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--<hr /><br />-->
-
-        <!--<div class="row" ng-repeat="node in ctrl.nodes" style="text-align: center">-->
-            <!--<div class="col-md-4"><p class="btn btn-default" style="width: 100%;">{{node}}</p></div>-->
-            <!--<div class="col-md-4"><p><hr class="between" style="width: 100%;" /></p></div>-->
-            <!--<div class="col-md-4">-->
-                <!--<div ng-show="ctrl.tables.length > 0">-->
-                    <!--<select style="width: 80%;" ng-change="ctrl.updateObjectMapper(node, table)" ng-options="table for table in ctrl.tables" ng-model="table"></select>-->
-                    <!--<p style="float: right"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#attributeMap_{{ node }}" title="Create attribute mappings"> >> </button></p>-->
-                    <!--<div class="modal fade" id="attributeMap_{{ node }}" tabindex="-1" role="dialog" aria-labelledby="attributeMapLabel">-->
-                        <!--<div class="modal-dialog modal-lg" role="document">-->
-                            <!--<div class="modal-content">-->
-                                <!--<div class="modal-header">-->
-                                    <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
-                                    <!--<h4 class="modal-title" id="createAttribteMap">Create attribute map from: {{node}} to {{table}}</h4>-->
-                                <!--</div>-->
-                                <!--<div class="modal-body">-->
-                                    <!--<div class="row" style="text-align: center">-->
-                                        <!--<div class="col-md-4">Attributes in Entity: {{node}}</div>-->
-                                        <!--<div class="col-md-4">Attribute map</div>-->
-                                        <!--<div class="col-md-4">Columns in MySql table: {{table}}</div>-->
-                                    <!--</div>-->
-                                    <!--<hr /><br />-->
-
-                                    <!--<div class="form-group row" ng-repeat="attribute in ctrl.getAttributesOfNode(ctrl.JSONSchema, node)" style="text-align: center">-->
-                                        <!--<div class="col-md-4"><p class="btn btn-default" style="width: 100%;">{{attribute}}</p></div>-->
-                                        <!--<div class="col-md-4"><p><hr class="between" style="width: 100%;" /></p></div>-->
-                                        <!--<div class="col-md-4">-->
-                                            <!--<select ng-if="table !== undefined" ng-options="column.Field for column in ctrl.tableColumnMap[table]" ng-model="column" ng-change="ctrl.updateAttributeMapper(node, attribute, column.Field)"></select>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                                <!--<div class="modal-footer">-->
-                                    <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
-                                    <!--<button type="button" class="btn btn-primary" data-dismiss="modal">Save</button>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--<div ng-show="ctrl.tables == null || ctrl.tables.length == 0"><p class="btn btn-default" style="width: 100%;">{{node}}</p></div>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
     <execute></execute>
 
 </div>
