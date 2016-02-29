@@ -1,0 +1,10 @@
+.between {
+    border: 3px dotted #0099CC;
+    width:200px;
+    margin-left:10px;
+    margin-right:10px;
+}
+
+.display-none {
+    display: none;
+}

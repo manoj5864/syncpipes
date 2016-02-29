@@ -1,7 +1,7 @@
-<div ng-controller="excelToMysqlCtrl as ctrl" ng-cloak ng-init="ctrl.init()" id="excelToMySql">
+<div ng-controller="excelToSCCtrl as ctrl" ng-cloak ng-init="ctrl.init()" id="excelToSC">
     <ol class="breadcrumb">
         <li><a ng-href="index.html#/selectAdapter">Select adapter</a></li>
-        <li class="active">Excel to MySql adapter</li>
+        <li class="active">Excel to SocioCortex adapter</li>
     </ol>
 
     <uib-tabset>
@@ -14,19 +14,18 @@
             </div>
 
             <div class="panel panel-default">
-                <div class="panel-heading">Export to MySql</div>
+                <div class="panel-heading">Export to SocioCortex</div>
                 <div class="panel-body">
-                    <mysql-config></mysql-config>
+                    <sc-select-workspace></sc-select-workspace>
                 </div>
             </div>
         </uib-tab>
 
         <uib-tab heading="Mapping" id="mapper" active="activeTab == 'mapper'">
-            <excel-mysql-mapper ng-if="activeTab == 'mapper'"></excel-mysql-mapper>
         </uib-tab>
 
         <uib-tab heading="Execution" id="execution" active="activeTab == 'execution'">
-            <excel-mysql-transformer ng-if="activeTab == 'execution'"></excel-mysql-transformer>
         </uib-tab>
+
     </uib-tabset>
 </div>

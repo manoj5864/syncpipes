@@ -1,13 +1,13 @@
-let  dataFactory = function ($rootScope) {
+let  excelSCDataFactory = function ($rootScope) {
     "use strict";
     var data = {};
-
-    data.name = "excelToMysql";
-    data.tables = null;
-    data.database = null;
+    data.auth = {user: "manoj5864@gmail.com", password: "@Sociocortex"};
+    data.name = "excelToSC";
+    data.types = null;
+    data.workspaces = null;
     data.excelJson = null;
     data.excelSheets = [];
-    data.objectMapper = [];;
+    data.objectMapper = [];
     data.tableColumnMap = {};
     data.activeTab = "config";
 
@@ -20,7 +20,10 @@ let  dataFactory = function ($rootScope) {
             $rootScope.$broadcast('dataBroadcast');
         },
         getName: function() {
-          return data.name;
+            return data.name;
+        },
+        getAuth: function() {
+            return data.auth;
         },
         getExcelJson: function() {
             return data.excelJson;
@@ -53,17 +56,17 @@ let  dataFactory = function ($rootScope) {
         getActiveTab: function(){
             return data.activeTab;
         },
-        setDatabase: function(database) {
-          data.database = database;
+        setWorkspace: function(workspace) {
+          data.workspace = workspace;
         },
-        getDatabase: function() {
-          return data.database;
+        getWorkspace: function() {
+          return data.workspace;
         },
-        setTables: function(t) {
-            data.tables = t;
+        setTypes: function(types) {
+            data.types = types;
         },
-        getTables: function() {
-            return data.tables;
+        getTypes: function() {
+            return data.types;
         },
         updateTableColumnMap: function(key, value) {
             data.tableColumnMap[key] = value;
@@ -94,10 +97,23 @@ let  dataFactory = function ($rootScope) {
             $rootScope.$broadcast('dataBroadcast');
         },
         initializeObjectMapper: function() {
-            data.objectMapper = excelObjectMapper;
+            for(var i=0; i<data.excelSheets.length; i++) {
+                var from = data.excelSheets[i];
+                var map = {};
+                map.from = from;
+                var attributes = [];
+                var cols = Object.keys(data.excelJson[from][0]);
+                for(var j=0; j<cols.length; j++) {
+                    var attrMap = {};
+                    attrMap.from = cols[j];
+                    attributes.push(attrMap);
+                }
+                map.attributes = attributes;
+                data.objectMapper.push(map);
+            }
+            console.log(this.getObjectMapper());
         }
     };
-
 };
-dataFactory.$inject = ['$rootScope'];
-export default dataFactory;
+excelSCDataFactory.$inject = ['$rootScope'];
+export default excelSCDataFactory;

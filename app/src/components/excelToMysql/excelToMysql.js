@@ -14,11 +14,11 @@ const ROOT_PATH = '/excelToMysql';
 
 let moduleName = angular
     .module("excelToMySql", ['ngRoute'])
-    .controller("excelToMysqlCtrl", excelToMysqlCtrl)
-    .service("excelService", ['$q', 'dataFactory', excelService])
+    .controller("excelToMysqlCtrl", ['$rootScope', 'dataFactory', excelToMysqlCtrl])
+    .service("excelService", ['$q', excelService])
     .service("mysqlService", ['$http', '$q', mysqlService])
     .factory("dataFactory", ['$rootScope', dataFactory])
-    .directive("excelSelect", ['excelService', 'dataFactory', excelSelect])
+    .directive("excelSelect", ['excelService', 'dataFactories', excelSelect])
     .directive("mysqlConfig", ['mysqlService', 'dataFactory', '$rootScope', mysqlConfig])
     .directive("excelMysqlMapper", ["excelService", 'mysqlService', 'dataFactory', excelMysqlMapper])
     .directive("excelMysqlTransformer", ["mysqlService", 'dataFactory', excelMysqlTransformer])
