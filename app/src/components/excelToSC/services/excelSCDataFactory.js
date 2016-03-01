@@ -10,6 +10,8 @@ let  excelSCDataFactory = function ($rootScope) {
     data.objectMapper = [];
     data.tableColumnMap = {};
     data.activeTab = "config";
+    data.workspace = null;
+    data.workspaceName = null;
 
     return {
         getData: function() {
@@ -49,18 +51,37 @@ let  excelSCDataFactory = function ($rootScope) {
         getObjectMapper: function () {
             return data.objectMapper;
         },
-        setActiveTab: function(tab) {
+        setExcelSCActiveTab: function(tab) {
             data.activeTab = tab;
-            $rootScope.$broadcast('tabBroadcast');
+            $rootScope.$broadcast('excelSCTabBroadcast');
         },
-        getActiveTab: function(){
+        getExcelSCActiveTab: function(){
             return data.activeTab;
         },
         setWorkspace: function(workspace) {
           data.workspace = workspace;
+          $rootScope.$broadcast('workspaceUpdateBroadcast');
         },
         getWorkspace: function() {
           return data.workspace;
+        },
+        setWorkspaceName: function(workspaceName) {
+            data.workspaceName = workspaceName;
+        },
+        getWorkspaceName: function() {
+            return data.workspaceName;
+        },
+        setWorkspaces: function(ws) {
+            data.workspaces = ws;
+        },
+        getWorkspaceByName: function(name) {
+            for(var i=0; i< data.workspaces.length; i++) {
+                if(data.workspaces[i].name === name) {
+                    this.setWorkspace(data.workspaces[i]);
+                    return data.workspaces[i];
+                }
+            }
+            return null;
         },
         setTypes: function(types) {
             data.types = types;
@@ -111,7 +132,11 @@ let  excelSCDataFactory = function ($rootScope) {
                 map.attributes = attributes;
                 data.objectMapper.push(map);
             }
-            console.log(this.getObjectMapper());
+        },
+        updateObjectMapper: function(map) {
+            for(var i=0; i<data.objectMapper.length; i++)
+                if(data.objectMapper[i].from.toUpperCase() === map.from.toUpperCase())
+                    data.objectMapper[i] = map;
         }
     };
 };

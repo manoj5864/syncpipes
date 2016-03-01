@@ -1,0 +1,28 @@
+<div>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createWorkspaceModal">
+        Create new workspace
+    </button>
+
+    <div class="modal fade" id="createWorkspaceModal" tabindex="-1" role="dialog" aria-labelledby="createWorkspaceModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="createWorkspaceModalLabel">Create a new workspace</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="workspace-name" class="control-label">Workspace name:</label>
+                            <input type="text" class="form-control" id="workspace-name" ng-model="workspaceNameToCreate">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button ng-if="workspaceNameToCreate" type="button" class="btn btn-primary" ng-click="createWorkspace()" data-dismiss="modal">create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

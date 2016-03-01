@@ -1,9 +1,12 @@
 <div ng-init="init()">
+    <div>{{message}}</div>
+
     <div>
         Select a workspace:
-        <select ng-options="workspace.name for workspace in workspaces" ng-model="workspace"></select> <br /> <br />
+        <select ng-options="workspace.name for workspace in workspaces" ng-model="workspaceName"></select> <br /> <br />
     </div>
+
     <div>
-        <button ng-show="workspace != ''" type="button" class="btn btn-primary" ng-click="createMapping()" >Create mappings</button>
+        <button ng-if="workspaceName" type="button" class="btn btn-primary" ng-click="createExcelSCMapping()" >Create mappings</button>
     </div>
 </div>

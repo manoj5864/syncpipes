@@ -1,11 +1,10 @@
-function excelToSCCtrl($scope, dataFactory) {
+function excelToSCCtrl($scope, excelSCDataFactory) {
     "use strict";
-    $scope.dataFactoryName = "excelSCDataFactory";
+    var self = this;
+    self.dataFactoryName = "excelSCDataFactory";
 
-    $scope.excel = dataFactory.getName();
-
-    $scope.$on('tabBroadcast', function() {
-        $scope.activeTab = dataFactory.getActiveTab();
+    $scope.$on('excelSCTabBroadcast', function() {
+        $scope.activeTab = excelSCDataFactory.getExcelSCActiveTab();
     });
 }
 

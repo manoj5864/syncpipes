@@ -25,11 +25,14 @@
     "dependencies": {
       "FileSaver": "npm:FileSaver@^0.10.0",
       "angular": "github:angular/bower-angular@^1.4.7",
+      "angular-material": "npm:angular-material@^1.0.5",
+      "angular-resource": "npm:angular-resource@^1.5.0",
       "angular-route": "github:angular/bower-angular-route@^1.4.7",
       "angular-ui-bootstrap": "npm:angular-ui-bootstrap@^1.0.3",
       "bootstrap": "github:twbs/bootstrap@^3.3.6",
       "css": "github:systemjs/plugin-css@^0.1.19",
       "font-awesome": "npm:font-awesome@^4.4.0",
+      "gsklee/ngStorage": "github:gsklee/ngStorage@^0.3.10",
       "js-xlsx": "github:SheetJS/js-xlsx@^0.8.0",
       "json-schema-parser": "npm:json-schema-parser@^0.1.0",
       "nomnoml": "npm:nomnoml@^0.0.3",
@@ -46,6 +49,8 @@
     "express": "^4.13.3",
     "jira": "^0.9.2",
     "lodash": "^3.10.1",
+    "ng-resource": "^1.3.2",
+    "ngstorage": "^0.3.10",
     "svg": "^0.1.0"
   }
 }

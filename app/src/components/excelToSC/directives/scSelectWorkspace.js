@@ -1,44 +1,57 @@
 import template from "components/excelToSC/views/scSelectWorkspace.html!text";
 
-let scSelectWorkspace = function($scope, dataFactory, scCrud) {
+let scSelectWorkspace = function(excelSCDataFactory, scAuth, scModel, scData) {
     "use strict";
 
     var controller = function($scope) {
         $scope.message = "";
-        $scope.workspace = "";
+
+        $scope.$on('workspaceUpdateBroadcast', function() {
+            getWorkspaces();
+            $scope.workspaceName = excelSCDataFactory.getWorkspace().name;
+        });
+
         $scope.init = function() {
-            scCrud.workspaces.findAll(dataFactory.getAuth()).then(function(response) {
-                $scope.workspaces = response;
-            }, function() {
-                $scope.message = "Something went wrong. Unable to retrieve workspaces!";
+            getWorkspaces();
+        };
+
+        function getWorkspaces() {
+            scAuth.login(excelSCDataFactory.getAuth().user, excelSCDataFactory.getAuth().password).then(function (response) {
+                scData.Workspace.query(function(response) {
+                    $scope.workspaces = response;
+                    excelSCDataFactory.setWorkspaces(response);
+                }, function() {
+                    $scope.message = "Something went wrong. Unable to retrieve workspaces!";
+                });
             });
         };
     };
 
     var linker = function (scope, element, attrs) {
-        scope.$watch('workspace', function() {
-            if(!isEmpty(scope.workspace)) {
-                dataFactory.setWorkspace(scope.workspace);
-                scCrud.types.findAll(dataFactory.getAuth(), scope.workspace.id, null).then(function(response) {
-                    dataFactory.setTypes(response);
-                    scope.types = response;
-                }, function() {
-                    $scope.message = "Unable to retrieve types in workspace " + scope.workspace.name;
+        scope.$watch('workspaceName', function() {
+            if(!isEmpty(scope.workspaceName)) {
+                excelSCDataFactory.setWorkspaceName(scope.workspaceName.name);
+                scAuth.login(excelSCDataFactory.getAuth().user, excelSCDataFactory.getAuth().password).then(function (response) {
+                    scModel.EntityType.queryByWorkspace({ id: scope.workspaceName.id }, function (types) {
+                        excelSCDataFactory.setTypes(types);
+                        scope.types = types;
+                    });
                 });
             }
         });
+
+        scope.createExcelSCMapping = function() {
+            excelSCDataFactory.setExcelSCActiveTab("mapper");
+        };
     };
 
     return {
         restrict: 'E',
         link: linker,
-        scope: {
-            dataFactoryName: "="
-        },
         controller: controller,
         template: template
     };
 };
 
-scSelectWorkspace.$inject = ['$rootScope', 'dataFactory', 'scCrud'];
+scSelectWorkspace.$inject = ['dataFactory', 'scAuth', 'scModel', 'scData'];
 export default scSelectWorkspace;

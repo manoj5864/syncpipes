@@ -1,4 +1,4 @@
-<div ng-controller="excelToSCCtrl as ctrl" ng-cloak ng-init="ctrl.init()" id="excelToSC">
+<div ng-controller="excelToSCCtrl as ctrl" ng-cloak id="excelToSC">
     <ol class="breadcrumb">
         <li><a ng-href="index.html#/selectAdapter">Select adapter</a></li>
         <li class="active">Excel to SocioCortex adapter</li>
@@ -14,7 +14,16 @@
             </div>
 
             <div class="panel panel-default">
-                <div class="panel-heading">Export to SocioCortex</div>
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-md-9">
+                            Export to SocioCortex
+                        </div>
+                        <div class="col-md-3">
+                            <sc-create-workspace></sc-create-workspace>
+                        </div>
+                    </div>
+                </div>
                 <div class="panel-body">
                     <sc-select-workspace></sc-select-workspace>
                 </div>
@@ -22,10 +31,11 @@
         </uib-tab>
 
         <uib-tab heading="Mapping" id="mapper" active="activeTab == 'mapper'">
+            <excel-sc-mapper ng-if="activeTab == 'mapper'"></excel-sc-mapper>
         </uib-tab>
 
         <uib-tab heading="Execution" id="execution" active="activeTab == 'execution'">
+            <excel-sc-transformer ng-if="activeTab == 'execution'"></excel-sc-transformer>
         </uib-tab>
-
     </uib-tabset>
 </div>
