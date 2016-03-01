@@ -1,46 +1,52 @@
-<div class="panel panel-default">
-
-    <div class="panel-body">
-        <form name="tableMappingForm" novalidate>
-        <div class="row" ng-repeat="object in objectMapper" style="text-align: center">
-            <div class="col-md-4"><p class="btn btn-default" style="width: 100%;">{{object.from}}</p></div>
-            <div class="col-md-4"><p><hr class="between" style="width: 100%;" /></p></div>
-            <div class="col-md-4">
-                <div ng-show="tables.length > 0">
-                        <select ng-options="table for table in tables" ng-model="object.to"></select>
-                        <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#attributeMap_{{ object.from }}" title="Create attribute mappings"> >> </button>
-                    <div class="modal fade" id="attributeMap_{{ object.from }}" tabindex="-1" role="dialog" aria-labelledby="attributeMapLabel">
-                        <div class="modal-dialog modal-lg" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                    <h4 class="modal-title" id="createAttribteMap">Create attribute map from: {{object.from}} to {{object.to}}</h4>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="row" style="text-align: center">
-                                        <div class="col-md-4">Attributes in Entity: {{object.from}}</div>
-                                        <div class="col-md-4">Attribute map</div>
-                                        <div class="col-md-4">Columns in MySql table: {{object.to}}</div>
-                                    </div>
-                                    <div class="form-group row" ng-repeat="(attribute, attributeValue) in object.attributes" style="text-align: center">
-                                        <div class="col-md-4"><p class="btn btn-default" style="width: 100%;">{{object.attributes[attribute].from}}</div>
-                                        <div class="col-md-4"><p><hr class="between" style="width: 100%;" /></p></div>
-                                        <div class="col-md-4">
-                                            <select ng-options="column for column in tableMap[object.to]" ng-model="object.attributes[attribute].to"></select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                </div>
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th>Entities in the EA</th>
+        <th>Concept map to</th>
+        <th>Tables in MySql</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="object in objectMapper">
+            <td>{{object.from}}</td>
+            <td>
+                <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
+            </td>
+            <td>
+                <select ng-options="table for table in tables" ng-model="object.to"></select>
+                <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#attributeMap_{{ object.from }}" title="Create attribute mappings"> >> </button>
+                <div class="modal fade" id="attributeMap_{{ object.from }}" tabindex="-1" role="dialog" aria-labelledby="attributeMapLabel">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="createAttribteMap">Create attribute map from: {{object.from}} to {{object.to}}</h4>
                             </div>
-
+                            <div class="modal-body">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Attributes in Entity: {{object.from}}</th>
+                                            <th>Attribute map</th>
+                                            <th>Columns in MySql table: {{object.to}}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr  ng-repeat="(attribute, attributeValue) in object.attributes">
+                                            <td>{{object.attributes[attribute].from}}</td>
+                                            <td><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></td>
+                                            <td><select ng-options="column for column in tableMap[object.to]" ng-model="object.attributes[attribute].to"></select></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <!--<button type="button" class="btn btn-info" ng-click="reset()">Cancel configuration</button>-->
-        </form>
-    </div>
-</div>
+            </td>
+        </tr>
+    </tbody>
+</table>
