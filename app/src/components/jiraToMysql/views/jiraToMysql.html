@@ -137,8 +137,6 @@
 
       </div>
       <br/>
-      <button type="button" class="btn btn-primary" ng-click="ctrl.executeModel()">Start execution</button>
-
     </div>
     <hr /><br />
 
@@ -182,6 +180,11 @@
         </div>
         <div ng-show="ctrl.tables == null || ctrl.tables.length == 0"><p class="btn btn-default" style="width: 100%;">{{jiraTable.from}}</p></div>
       </div>
+    </div>
+    <br />
+    <hr />
+    <div>
+      <button type="button" class="btn btn-primary" ng-click="ctrl.executeModel()">Start execution</button>
     </div>
   </div>
 
