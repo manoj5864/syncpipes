@@ -51,27 +51,6 @@ let excelMysqlMapper = function(excelService, mysqlService, dataFactory){
     return {
         restrict: 'E',
         link: linker,
-        scope: {
-            status: "=",
-            message: "=",
-            reset: "=",
-            baseUrl: "=",
-            port: "=",
-            userName: "=",
-            password: "=",
-            connectToMysql: "=",
-            databases: "=",
-            database: "=",
-            createDb: "=",
-            databaseName: "=",
-            createMapping: "=",
-            excelSheets: "=",
-            tables: "=",
-            getExcelColumn: "=",
-            init: "=",
-            getTableColumnMap: "=",
-            objectMapper: "="
-        },
         controller: control,
         template: template
     };

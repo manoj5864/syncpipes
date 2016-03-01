@@ -82,10 +82,6 @@ let excelMysqlTransformer = function(mysqlService, dataFactory){
 
     return {
         restrict: 'E',
-        scope: {
-            status: "=",
-            message: "="
-        },
         controller: controller,
         template: template
     };

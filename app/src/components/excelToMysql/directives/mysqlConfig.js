@@ -80,21 +80,6 @@ let mysqlConfig = function (mysqlService, dataFactory, $rootScope){
     return {
         restrict: 'E',
         link: linker,
-        scope: {
-            status: "=",
-            message: "=",
-            reset: "=",
-            baseUrl: "=",
-            port: "=",
-            userName: "=",
-            password: "=",
-            connectToMysql: "=",
-            databases: "=",
-            database: "=",
-            createDb: "=",
-            databaseName: "=",
-            createMapping: "="
-        },
         template: template
     };
 };

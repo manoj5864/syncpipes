@@ -31,6 +31,7 @@ System.config({
     "core-js": "npm:core-js@1.2.5",
     "css": "github:systemjs/plugin-css@0.1.20",
     "font-awesome": "npm:font-awesome@4.4.0",
+    "ngStorage": "github:gsklee/ngStorage@0.3.10",
     "js-xlsx": "github:SheetJS/js-xlsx@0.8.0",
     "json-schema-parser": "npm:json-schema-parser@0.1.0",
     "ngStorage": "github:gsklee/ngStorage@0.3.10",
