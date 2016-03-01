@@ -1,54 +1,108 @@
 <div ng-init="init()">
     <br />
-    <div class="row" style="text-align: center">
-        <div class="col-md-4">Sheets in the excel file</div>
-        <div class="col-md-4">Object map</div>
-        <div class="col-md-4">
-            Tables in MySql
-            <p style="float: right"><button type="button" class="btn btn-primary" ng-click="executeModel()">Start execution</button></p>
-        </div>
-    </div>
-    <hr /><br />
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Sheets in the excel file</th>
+                <th>Concept map to</th>
+                <th>Tables in MySql</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="object in objectMapper">
+                <td>{{object.from}}</td>
+                <td><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></td>
+                <td>
+                    <div ng-show="tables.length > 0">
+                    <select style="width: 80%;" ng-options="table for table in tables" ng-model="object.to"></select>
+                    <p style="float: right"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#attributeMap_{{object.from}}" title="Create attribute mappings"> >> </button></p>
+                        <div class="modal fade" id="attributeMap_{{object.from}}" tabindex="-1" role="dialog" aria-labelledby="attributeMapLabel">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title" id="createAttribteMap">Create attribute map from: {{object.from}} to {{object.to}}</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row" style="text-align: center">
+                                            <div class="col-md-4">Columns in the excel sheet: {{object.from}}</div>
+                                            <div class="col-md-4">Attribute map</div>
+                                            <div class="col-md-4">Columns in MySql table: {{object.to}}</div>
+                                        </div>
+                                        <hr /><br />
 
-    <div class="row" ng-repeat="object in objectMapper" style="text-align: center">
-        <div class="col-md-4"><p class="btn btn-default" style="width: 100%;">{{object.from}}</p></div>
-        <div class="col-md-4"><p><hr class="between" style="width: 100%;" /></p></div>
-        <div class="col-md-4">
-            <div ng-show="tables.length > 0">
-                <select style="width: 80%;" ng-options="table for table in tables" ng-model="object.to"></select>
-                <p style="float: right"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#attributeMap_{{object.from}}" title="Create attribute mappings"> >> </button></p>
-                <div class="modal fade" id="attributeMap_{{object.from}}" tabindex="-1" role="dialog" aria-labelledby="attributeMapLabel">
-                    <div class="modal-dialog modal-lg" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" id="createAttribteMap">Create attribute map from: {{object.from}} to {{object.to}}</h4>
-                            </div>
-                            <div class="modal-body">
-                                <div class="row" style="text-align: center">
-                                    <div class="col-md-4">Columns in the excel sheet: {{object.from}}</div>
-                                    <div class="col-md-4">Attribute map</div>
-                                    <div class="col-md-4">Columns in MySql table: {{object.to}}</div>
-                                </div>
-                                <hr /><br />
-
-                                <div class="form-group row" ng-repeat="(attribute, attributeValue) in object.attributes" style="text-align: center">
-                                    <div class="col-md-4"><p class="btn btn-default" style="width: 100%;">{{object.attributes[attribute].from}}</p></div>
-                                    <div class="col-md-4"><p><hr class="between" style="width: 100%;" /></p></div>
-                                    <div class="col-md-4">
-                                        <select ng-options="column for column in getTableColumnMap(object.to)" ng-model="object.attributes[attribute].to"></select>
+                                        <div class="form-group row" ng-repeat="(attribute, attributeValue) in object.attributes" style="text-align: center">
+                                            <div class="col-md-4"><p class="btn btn-default" style="width: 100%;">{{object.attributes[attribute].from}}</p></div>
+                                            <div class="col-md-4"><p><hr class="between" style="width: 100%;" /></p></div>
+                                            <div class="col-md-4">
+                                                <select ng-options="column for column in getTableColumnMap(object.to)" ng-model="object.attributes[attribute].to"></select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
-                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div ng-show="tables === null || tables.length === 0"><p class="btn btn-default" style="width: 100%;">{{object.from}}</p></div>
-        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <!--<div class="row" style="text-align: center">-->
+        <!--<div class="col-md-4"><h4>Sheets in the excel file</h4></div>-->
+        <!--<div class="col-md-4"><h4>Object map</h4></div>-->
+        <!--<div class="col-md-4">-->
+            <!--<h4>Tables in MySql</h4>-->
+        <!--</div>-->
+    <!--</div>-->
+
+    <!--<div class="row" ng-repeat="object in objectMapper" style="text-align: center">-->
+        <!--&lt;!&ndash;<div class="col-md-4"><p class="btn btn-default" style="width: 100%;">{{object.from}}</p></div>&ndash;&gt;-->
+        <!--<div class="col-md-4">{{object.from}}</div>-->
+        <!--<div class="col-md-4"><p><hr class="between" style="width: 100%;" /></p></div>-->
+        <!--<div class="col-md-4">-->
+            <!--<div ng-show="tables.length > 0">-->
+                <!--<select style="width: 80%;" ng-options="table for table in tables" ng-model="object.to"></select>-->
+                <!--<p style="float: right"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#attributeMap_{{object.from}}" title="Create attribute mappings"> >> </button></p>-->
+                <!--<div class="modal fade" id="attributeMap_{{object.from}}" tabindex="-1" role="dialog" aria-labelledby="attributeMapLabel">-->
+                    <!--<div class="modal-dialog modal-lg" role="document">-->
+                        <!--<div class="modal-content">-->
+                            <!--<div class="modal-header">-->
+                                <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+                                <!--<h4 class="modal-title" id="createAttribteMap">Create attribute map from: {{object.from}} to {{object.to}}</h4>-->
+                            <!--</div>-->
+                            <!--<div class="modal-body">-->
+                                <!--<div class="row" style="text-align: center">-->
+                                    <!--<div class="col-md-4">Columns in the excel sheet: {{object.from}}</div>-->
+                                    <!--<div class="col-md-4">Attribute map</div>-->
+                                    <!--<div class="col-md-4">Columns in MySql table: {{object.to}}</div>-->
+                                <!--</div>-->
+                                <!--<hr /><br />-->
+
+                                <!--<div class="form-group row" ng-repeat="(attribute, attributeValue) in object.attributes" style="text-align: center">-->
+                                    <!--<div class="col-md-4"><p class="btn btn-default" style="width: 100%;">{{object.attributes[attribute].from}}</p></div>-->
+                                    <!--<div class="col-md-4"><p><hr class="between" style="width: 100%;" /></p></div>-->
+                                    <!--<div class="col-md-4">-->
+                                        <!--<select ng-options="column for column in getTableColumnMap(object.to)" ng-model="object.attributes[attribute].to"></select>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="modal-footer">-->
+                                <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                                <!--<button type="button" class="btn btn-primary" data-dismiss="modal">Save</button>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div ng-show="tables === null || tables.length === 0"><p class="btn btn-default" style="width: 100%;">{{object.from}}</p></div>-->
+        <!--</div>-->
+    <!--</div>-->
+    <div class="row">
+        <p style="float: right"><button type="button" class="btn btn-primary" ng-click="executeModel()">Start execution</button></p>
     </div>
+
 </div>
